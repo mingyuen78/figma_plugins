@@ -1,0 +1,17 @@
+{
+  "name": "/navbar.maker",
+  "id": "1234567890123456789",
+  "api": "1.0.0",
+  "main": "code.js",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "documentAccess": "dynamic-page",
+  "editorType": [
+    "figma"
+  ],
+  "networkAccess": {
+    "allowedDomains": [
+      "https://*.gravatar.com"
+    ]
+  }
+}
