@@ -128,7 +128,53 @@ async function run() {
   alignLabel.x = 20; alignLabel.y = 380;
   alignValue.x = 20; alignValue.y = 400;
 
-  section.resize(450, alignValue.y + alignValue.height + 40);
+  // 6. Footer Links
+  const footerLabel = figma.createText();
+  footerLabel.characters = "Footer Links (use | for line break in mobile):";
+  footerLabel.fontSize = 12;
+  footerLabel.fontName = { family: "Inter", style: "Bold" };
+  footerLabel.fills = whiteFill;
+
+  const footerValue = figma.createText();
+  footerValue.characters = "Terms &| Conditions, FAQ, Privacy| Policy, Contact Us";
+  footerValue.fontSize = 14;
+  footerValue.name = "param_footer_links";
+  footerValue.fills = whiteFill;
+
+  section.appendChild(footerLabel);
+  section.appendChild(footerValue);
+
+  footerLabel.x = 20; footerLabel.y = 460;
+  footerValue.x = 20; footerValue.y = 480;
+
+  // 7. Footer Separator
+  const sepLabel = figma.createText();
+  sepLabel.characters = "Footer Separator:";
+  sepLabel.fontSize = 12;
+  sepLabel.fontName = { family: "Inter", style: "Bold" };
+  sepLabel.fills = whiteFill;
+
+  const sepValue = figma.createFrame();
+  sepValue.name = "param_footer_sep";
+  sepValue.resize(20, 35);
+  sepValue.fills = [{ type: 'SOLID', color: { r: 0.4, g: 0.4, b: 0.4 } }];
+
+  const sepText = figma.createText();
+  sepText.characters = "|";
+  sepText.fontSize = 12;
+  sepText.fontName = { family: "Inter", style: "Bold" };
+  sepText.fills = whiteFill;
+  sepValue.appendChild(sepText);
+  sepText.x = (sepValue.width - sepText.width) / 2;
+  sepText.y = (sepValue.height - sepText.height) / 2;
+
+  section.appendChild(sepLabel);
+  section.appendChild(sepValue);
+
+  sepLabel.x = 20; sepLabel.y = 540;
+  sepValue.x = 20; sepValue.y = 560;
+
+  section.resize(450, sepValue.y + sepValue.height + 40);
 
   figma.viewport.scrollAndZoomIntoView([section]);
   figma.closePlugin();

@@ -17,8 +17,18 @@ Run this plugin to generate a "Parameter Here" configuration section on your can
 - **Logo**: A frame named `param_logo`. Replace the placeholder content with your actual logo.
 - **Feature**: A frame named `param_feature` (e.g., for language switchers like `EN | CH`).
 - **Mobile Menu Alignment**: Set to `left`, `center`, or `right` to control text alignment in the mobile menu.
+- **Footer Links**: A comma-separated list of links for the footer (e.g., `Terms & Conditions, FAQ`).
+    - Use `|` (e.g., `Privacy | Policy`) to force a **line break** in the generated mobile footer.
 
 ### 2. `/navbar.maker`
+...
+### 3. `/footer.maker`
+Generates three footer variations based on the "Footer Links" and "Base Color" parameters.
+
+#### What it generates:
+- **Desktop Footer** (1920x75px)
+- **Tablet Footer** (1280x75px)
+- **Mobile Footer** (390x175px) with vertically stacked links.
 Once you have configured your parameters in the "Parameter Here" section, run this plugin to generate the navbars.
 
 #### What it generates:
