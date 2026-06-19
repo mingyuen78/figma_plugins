@@ -5,7 +5,7 @@ async function run() {
   const section = figma.createSection();
   section.name = "Parameter Here";
   section.fills = [{ type: 'SOLID', color: { r: 0.2, g: 0.2, b: 0.2 } }];
-  section.resize(450, 500);
+  section.resize(1000, 500);
 
   const whiteFill = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
 
@@ -15,7 +15,7 @@ async function run() {
   instruction.fontSize = 14;
   instruction.fontName = { family: "Inter", style: "Bold" };
   instruction.fills = whiteFill;
-  instruction.resize(400, instruction.height);
+  instruction.resize(960, instruction.height);
 
   // 1. Color Hex Code
   const colorLabel = figma.createText();
@@ -64,28 +64,49 @@ async function run() {
   logoText.x = (logoValue.width - logoText.width) / 2;
   logoText.y = (logoValue.height - logoText.height) / 2;
 
-  // 4. Feature Placeholder
-  const featureLabel = figma.createText();
-  featureLabel.characters = "Feature:";
-  featureLabel.fontSize = 12;
-  featureLabel.fontName = { family: "Inter", style: "Bold" };
-  featureLabel.fills = whiteFill;
+  // 4. Footer Feature (desktop) Placeholder
+  const featureDesktopLabel = figma.createText();
+  featureDesktopLabel.characters = "Footer Feature (desktop):";
+  featureDesktopLabel.fontSize = 12;
+  featureDesktopLabel.fontName = { family: "Inter", style: "Bold" };
+  featureDesktopLabel.fills = whiteFill;
 
-  const featureValue = figma.createFrame();
-  featureValue.name = "param_feature";
-  featureValue.resize(72, 35); 
-  featureValue.fills = [{ type: 'SOLID', color: { r: 0.4, g: 0.4, b: 0.4 } }];
+  const featureDesktopValue = figma.createFrame();
+  featureDesktopValue.name = "param_feature_desktop";
+  featureDesktopValue.resize(960, 40); 
+  featureDesktopValue.fills = [{ type: 'SOLID', color: { r: 0.4, g: 0.4, b: 0.4 } }];
 
-  const featureText = figma.createText();
-  featureText.characters = "EN | CH";
-  featureText.fontSize = 12;
-  featureText.fontName = { family: "Inter", style: "Bold" };
-  featureText.fills = whiteFill;
-  featureValue.appendChild(featureText);
-  featureText.x = (featureValue.width - featureText.width) / 2;
-  featureText.y = (featureValue.height - featureText.height) / 2;
+  const featureDesktopText = figma.createText();
+  featureDesktopText.characters = "FOOTER FEATURE (DESKTOP)";
+  featureDesktopText.fontSize = 12;
+  featureDesktopText.fontName = { family: "Inter", style: "Bold" };
+  featureDesktopText.fills = whiteFill;
+  featureDesktopValue.appendChild(featureDesktopText);
+  featureDesktopText.x = (featureDesktopValue.width - featureDesktopText.width) / 2;
+  featureDesktopText.y = (featureDesktopValue.height - featureDesktopText.height) / 2;
 
-  // 5. Mobile Menu Alignment
+  // 5. Footer Feature (mobile) Placeholder
+  const featureMobileLabel = figma.createText();
+  featureMobileLabel.characters = "Footer Feature (mobile):";
+  featureMobileLabel.fontSize = 12;
+  featureMobileLabel.fontName = { family: "Inter", style: "Bold" };
+  featureMobileLabel.fills = whiteFill;
+
+  const featureMobileValue = figma.createFrame();
+  featureMobileValue.name = "param_feature_mobile";
+  featureMobileValue.resize(300, 80); 
+  featureMobileValue.fills = [{ type: 'SOLID', color: { r: 0.4, g: 0.4, b: 0.4 } }];
+
+  const featureMobileText = figma.createText();
+  featureMobileText.characters = "FOOTER FEATURE (MOBILE)";
+  featureMobileText.fontSize = 12;
+  featureMobileText.fontName = { family: "Inter", style: "Bold" };
+  featureMobileText.fills = whiteFill;
+  featureMobileValue.appendChild(featureMobileText);
+  featureMobileText.x = (featureMobileValue.width - featureMobileText.width) / 2;
+  featureMobileText.y = (featureMobileValue.height - featureMobileText.height) / 2;
+
+  // 6. Mobile Menu Alignment
   const alignLabel = figma.createText();
   alignLabel.characters = "Mobile Menu Alignment (left, center, right):";
   alignLabel.fontSize = 12;
@@ -106,8 +127,10 @@ async function run() {
   section.appendChild(linksValue);
   section.appendChild(logoLabel);
   section.appendChild(logoValue);
-  section.appendChild(featureLabel);
-  section.appendChild(featureValue);
+  section.appendChild(featureDesktopLabel);
+  section.appendChild(featureDesktopValue);
+  section.appendChild(featureMobileLabel);
+  section.appendChild(featureMobileValue);
   section.appendChild(alignLabel);
   section.appendChild(alignValue);
 
@@ -122,13 +145,16 @@ async function run() {
   logoLabel.x = 20; logoLabel.y = 220;
   logoValue.x = 20; logoValue.y = 240;
 
-  featureLabel.x = 20; featureLabel.y = 300;
-  featureValue.x = 20; featureValue.y = 320;
+  featureDesktopLabel.x = 20; featureDesktopLabel.y = 300;
+  featureDesktopValue.x = 20; featureDesktopValue.y = 320;
 
-  alignLabel.x = 20; alignLabel.y = 380;
-  alignValue.x = 20; alignValue.y = 400;
+  featureMobileLabel.x = 20; featureMobileLabel.y = 380;
+  featureMobileValue.x = 20; featureMobileValue.y = 400;
 
-  // 6. Footer Links
+  alignLabel.x = 20; alignLabel.y = 500;
+  alignValue.x = 20; alignValue.y = 520;
+
+  // 7. Footer Links
   const footerLabel = figma.createText();
   footerLabel.characters = "Footer Links (use | for line break in mobile):";
   footerLabel.fontSize = 12;
@@ -144,10 +170,10 @@ async function run() {
   section.appendChild(footerLabel);
   section.appendChild(footerValue);
 
-  footerLabel.x = 20; footerLabel.y = 460;
-  footerValue.x = 20; footerValue.y = 480;
+  footerLabel.x = 20; footerLabel.y = 580;
+  footerValue.x = 20; footerValue.y = 600;
 
-  // 7. Footer Separator
+  // 8. Footer Separator
   const sepLabel = figma.createText();
   sepLabel.characters = "Footer Separator:";
   sepLabel.fontSize = 12;
@@ -171,10 +197,10 @@ async function run() {
   section.appendChild(sepLabel);
   section.appendChild(sepValue);
 
-  sepLabel.x = 20; sepLabel.y = 540;
-  sepValue.x = 20; sepValue.y = 560;
+  sepLabel.x = 20; sepLabel.y = 660;
+  sepValue.x = 20; sepValue.y = 680;
 
-  section.resize(450, sepValue.y + sepValue.height + 40);
+  section.resize(1000, sepValue.y + sepValue.height + 40);
 
   figma.viewport.scrollAndZoomIntoView([section]);
   figma.closePlugin();
