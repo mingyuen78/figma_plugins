@@ -7,7 +7,7 @@ A suite of Figma plugins to generate responsive navbars based on design-driven p
 ### 1. `/input.section`
 Run this plugin to generate a "Parameter Here" configuration section on your canvas. This section acts as the UI for your navbar settings.
 
-![Input Section Parameters](/tmp/zencoder/pasted/files/image-20260619042930-6s8gvb..png)
+![Input Section Parameters](./input_parameters.png)
 
 #### Available Parameters:
 - **Base Color**: Enter a Hex code (e.g., `#006937`) to set the navbar background.
