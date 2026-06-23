@@ -67,8 +67,8 @@ async function run() {
     frame.name = `Footer - ${width}x${height}${isMobile ? ' (Mobile)' : ''}`;
 
     if (isMobile) {
-      // Mobile: Fixed column width of 80px
-      const colWidth = 80;
+      // Mobile: Fixed column width of 85px
+      const colWidth = 85;
       const totalLinksWidth = colWidth * linksArray.length;
       const mobileWidth = totalLinksWidth + (padding * 2);
       
