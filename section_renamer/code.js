@@ -8,7 +8,8 @@ const targetDimensions = [
   { w: 1536, h: 826 },
   { w: 1707, h: 825 },
   { w: 1920, h: 1080 },
-  { w: 2880, h: 1418 }
+  { w: 2880, h: 1418 },
+  { w: 2880, h: 1367 }
 ];
 
 const tolerance = 5;
@@ -52,7 +53,7 @@ if (selectedSections.length === 0) {
   figma.notify("Please select a section first.");
   figma.closePlugin();
 } else {
-  let renamedCount = 0;
+  let totalProcessed = 0;
   
   selectedSections.forEach(section => {
     const sectionName = section.name;
@@ -68,26 +69,45 @@ if (selectedSections.length === 0) {
     }
 
     const matchedChildren = [];
+    const foundDimensions = new Set();
 
-    // Rename and collect matching children
+    // 1. Rename existing matching children and track which dimensions are found
     section.children.forEach(child => {
       if ("width" in child && "height" in child) {
         const dim = findClosestDimension(child.width, child.height);
         
         if (dim) {
-          const matchedDimStr = `${dim.w}x${dim.h}`;
+          const dimKey = `${dim.w}x${dim.h}`;
+          foundDimensions.add(dimKey);
+
           const newName = suffix 
-            ? `${prefix}_${matchedDimStr}_${suffix}`
-            : `${prefix}_${matchedDimStr}`;
+            ? `${prefix}_${dimKey}_${suffix}`
+            : `${prefix}_${dimKey}`;
           
           child.name = newName;
-          renamedCount++;
           matchedChildren.push(child);
         }
       }
     });
 
-    // Rearrange items: sort by width then height (smallest range to largest)
+    // 2. Create missing frames for all target dimensions
+    targetDimensions.forEach(dim => {
+      const dimKey = `${dim.w}x${dim.h}`;
+      if (!foundDimensions.has(dimKey)) {
+        const newFrame = figma.createFrame();
+        newFrame.resize(dim.w, dim.h);
+        const newName = suffix 
+          ? `${prefix}_${dimKey}_${suffix}`
+          : `${prefix}_${dimKey}`;
+        newFrame.name = newName;
+        section.appendChild(newFrame);
+        matchedChildren.push(newFrame);
+      }
+    });
+
+    totalProcessed += matchedChildren.length;
+
+    // 3. Rearrange items: sort by width then height (smallest range to largest)
     matchedChildren.sort((a, b) => {
       if (a.width !== b.width) return a.width - b.width;
       return a.height - b.height;
@@ -104,18 +124,20 @@ if (selectedSections.length === 0) {
         currentY += child.height + gap;
       });
 
-      // Calculate final section dimensions including padding
+      // 4. Update layer order: Smallest on top of the layer stack
+      for (let i = matchedChildren.length - 1; i >= 0; i--) {
+        section.appendChild(matchedChildren[i]);
+      }
+
+      // 5. Calculate final section dimensions including padding
       const finalWidth = maxWidth + (padding * 2);
       const finalHeight = (currentY - gap) + padding;
-      
       section.resize(finalWidth, finalHeight);
     }
   });
 
-  if (renamedCount > 0) {
-    figma.notify(`Renamed, rearranged, and added padding for ${renamedCount} items!`);
-  } else {
-    figma.notify("No items matched the target dimensions.");
+  if (totalProcessed > 0) {
+    figma.notify(`Successfully organized all banner sizes!`);
   }
   
   setTimeout(() => figma.closePlugin(), 500);

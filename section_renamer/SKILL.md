@@ -26,6 +26,7 @@ This skill allows you to rename and organize child items within a Figma section 
    - 1707x825
    - 1920x1080
    - 2880x1418
+   - 2880x1367 (Auto-created if missing)
 
 4. **Rearrangement & Layout**:
    - **Sort**: Smallest width/height to largest.

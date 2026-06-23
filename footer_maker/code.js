@@ -20,8 +20,20 @@ async function run() {
   const footer_links = footerLinksNode ? footerLinksNode.characters : "Terms & Conditions, FAQ, Privacy Policy, Contact Us";
   
   let fontName = { family: "Inter", style: "Regular" };
+  let fontSize = 14;
+  let textDecoration = "NONE";
+  let textCase = "ORIGINAL";
   if (footerLinksNode && footerLinksNode.fontName !== figma.mixed) {
     fontName = { family: footerLinksNode.fontName.family, style: footerLinksNode.fontName.style };
+    if (footerLinksNode.fontSize !== figma.mixed) {
+      fontSize = footerLinksNode.fontSize;
+    }
+    if (footerLinksNode.textDecoration !== figma.mixed) {
+      textDecoration = footerLinksNode.textDecoration;
+    }
+    if (footerLinksNode.textCase !== figma.mixed) {
+      textCase = footerLinksNode.textCase;
+    }
   }
 
   try {
@@ -55,9 +67,13 @@ async function run() {
     frame.name = `Footer - ${width}x${height}${isMobile ? ' (Mobile)' : ''}`;
 
     if (isMobile) {
-      // Mobile: Equally divided columns
-      const availableWidth = width - (padding * 2);
-      const colWidth = availableWidth / linksArray.length;
+      // Mobile: Fixed column width of 80px
+      const colWidth = 80;
+      const totalLinksWidth = colWidth * linksArray.length;
+      const mobileWidth = totalLinksWidth + (padding * 2);
+      
+      // Update frame width to fit the links
+      frame.resize(mobileWidth, height);
 
       // Calculate max height for mobile links to align them properly
       const textNodes = [];
@@ -65,7 +81,9 @@ async function run() {
         const text = figma.createText();
         text.fontName = fontName;
         text.characters = link.replace(/\|/g, "\n");
-        text.fontSize = 10;
+        text.fontSize = fontSize;
+        text.textDecoration = textDecoration;
+        text.textCase = textCase;
         text.resize(colWidth, text.height);
         text.textAutoResize = "HEIGHT";
         textNodes.push(text);
@@ -85,6 +103,10 @@ async function run() {
         if (index < linksArray.length - 1 && sepNode) {
           const sepClone = sepNode.clone();
           frame.appendChild(sepClone);
+          
+          // Respect dimensions of the source sepNode
+          sepClone.resize(sepNode.width, sepNode.height);
+          
           sepClone.x = padding + (index + 1) * colWidth - (sepClone.width / 2);
           sepClone.y = rowCenterY - (sepClone.height / 2);
           
@@ -101,20 +123,22 @@ async function run() {
       if (featureMobileNode) {
         const featureClone = featureMobileNode.clone();
         frame.appendChild(featureClone);
-        featureClone.x = (width - featureClone.width) / 2;
+        featureClone.x = (frame.width - featureClone.width) / 2;
         featureClone.y = maxLinkY + 20;
       }
     } else {
       // Desktop: Left-aligned group
       const items = [];
       let totalWidth = 0;
-      const gap = 15; // Tighter gap for desktop
+      const gap = 10; // Tighter gap for desktop
 
       linksArray.forEach((link, index) => {
         const text = figma.createText();
         text.fontName = fontName;
         text.characters = link.replace(/\|/g, " ");
-        text.fontSize = 14;
+        text.fontSize = fontSize + 2;
+        text.textDecoration = textDecoration;
+        text.textCase = textCase;
         text.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
         text.textAutoResize = "WIDTH_AND_HEIGHT";
         
@@ -123,6 +147,9 @@ async function run() {
 
         if (index < linksArray.length - 1 && sepNode) {
           const sepClone = sepNode.clone();
+          // Respect dimensions of the source sepNode
+          sepClone.resize(sepNode.width, sepNode.height);
+          
           items.push({ type: 'SEP', node: sepClone });
           totalWidth += sepClone.width + (gap * 2);
         }

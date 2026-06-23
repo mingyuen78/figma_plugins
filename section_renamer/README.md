@@ -27,6 +27,7 @@ A Figma plugin dedicated to renaming and organizing items within a section based
 - 1707x825
 - 1920x1080
 - 2880x1418
+- 2880x1367 (Automatically created if no matching item exists in the section)
 
 ## How to Use
 

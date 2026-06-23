@@ -53,7 +53,7 @@ async function run() {
   const logoValue = figma.createFrame();
   logoValue.name = "param_logo";
   logoValue.resize(90, 35);
-  logoValue.fills = [{ type: 'SOLID', color: { r: 0.4, g: 0.4, b: 0.4 } }];
+  logoValue.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 }, opacity: 0.2 }];
   
   const logoText = figma.createText();
   logoText.characters = "LOGO";
@@ -74,7 +74,7 @@ async function run() {
   const featureDesktopValue = figma.createFrame();
   featureDesktopValue.name = "param_feature_desktop";
   featureDesktopValue.resize(960, 40); 
-  featureDesktopValue.fills = [{ type: 'SOLID', color: { r: 0.4, g: 0.4, b: 0.4 } }];
+  featureDesktopValue.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 }, opacity: 0.2 }];
 
   const featureDesktopText = figma.createText();
   featureDesktopText.characters = "FOOTER FEATURE (DESKTOP)";
@@ -94,8 +94,8 @@ async function run() {
 
   const featureMobileValue = figma.createFrame();
   featureMobileValue.name = "param_feature_mobile";
-  featureMobileValue.resize(300, 80); 
-  featureMobileValue.fills = [{ type: 'SOLID', color: { r: 0.4, g: 0.4, b: 0.4 } }];
+  featureMobileValue.resize(360, 80); 
+  featureMobileValue.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 }, opacity: 0.2 }];
 
   const featureMobileText = figma.createText();
   featureMobileText.characters = "FOOTER FEATURE (MOBILE)";
@@ -162,7 +162,7 @@ async function run() {
   footerLabel.fills = whiteFill;
 
   const footerValue = figma.createText();
-  footerValue.characters = "Terms &| Conditions, FAQ, Privacy| Policy, Contact Us";
+  footerValue.characters = "TERMS &|CONDITIONS, FAQ, PRIVACY|POLICY, BEERS|YOU LOVE, RESPONSIBLE|DRINKING";
   footerValue.fontSize = 14;
   footerValue.name = "param_footer_links";
   footerValue.fills = whiteFill;
@@ -182,17 +182,15 @@ async function run() {
 
   const sepValue = figma.createFrame();
   sepValue.name = "param_footer_sep";
-  sepValue.resize(20, 35);
-  sepValue.fills = [{ type: 'SOLID', color: { r: 0.4, g: 0.4, b: 0.4 } }];
+  sepValue.resize(20, 55);
+  sepValue.fills = [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 }, opacity: 0 }];
 
-  const sepText = figma.createText();
-  sepText.characters = "|";
-  sepText.fontSize = 12;
-  sepText.fontName = { family: "Inter", style: "Bold" };
-  sepText.fills = whiteFill;
-  sepValue.appendChild(sepText);
-  sepText.x = (sepValue.width - sepText.width) / 2;
-  sepText.y = (sepValue.height - sepText.height) / 2;
+  const innerSep = figma.createFrame();
+  innerSep.resize(2, 25);
+  innerSep.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
+  sepValue.appendChild(innerSep);
+  innerSep.x = (sepValue.width - innerSep.width) / 2;
+  innerSep.y = (sepValue.height - innerSep.height) / 2;
 
   section.appendChild(sepLabel);
   section.appendChild(sepValue);
