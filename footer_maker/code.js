@@ -15,9 +15,14 @@ async function run() {
   const sepNode = section.findOne(n => n.name === "param_footer_sep");
   const featureDesktopNode = section.findOne(n => n.name === "param_feature_desktop" && n.type === "FRAME");
   const featureMobileNode = section.findOne(n => n.name === "param_feature_mobile" && n.type === "FRAME");
+  const socialLinksNode = section.findOne(n => n.name === "param_social_links" && n.type === "FRAME");
+  const socialAlignDesktopNode = section.findOne(n => n.name === "param_social_align_desktop" && n.type === "TEXT");
+  const socialAlignMobileNode = section.findOne(n => n.name === "param_social_align_mobile" && n.type === "TEXT");
 
   const base_color = colorNode ? colorNode.characters : "#006937";
   const footer_links = footerLinksNode ? footerLinksNode.characters : "Terms & Conditions, FAQ, Privacy Policy, Contact Us";
+  const social_align_desktop = socialAlignDesktopNode ? socialAlignDesktopNode.characters.toLowerCase().trim() : "right";
+  const social_align_mobile = socialAlignMobileNode ? socialAlignMobileNode.characters.toLowerCase().trim() : "top";
   
   let fontName = { family: "Inter", style: "Regular" };
   let fontSize = 14;
@@ -59,6 +64,68 @@ async function run() {
 
   const bgColor = hexToRgb(base_color);
   const padding = 20;
+  const vPadding = 12;
+
+  function alignFrameContent(frame, alignment) {
+    if (!frame || !("children" in frame) || frame.children.length === 0) return;
+    
+    // 1. Recursive padding reset
+    function resetPaddings(node) {
+      if ("paddingLeft" in node) {
+        node.paddingLeft = 0; node.paddingRight = 0;
+        node.paddingTop = 0; node.paddingBottom = 0;
+      }
+      if ("children" in node) node.children.forEach(resetPaddings);
+    }
+    resetPaddings(frame);
+
+    // 2. Filter children to ignore invisible ones and placeholders
+    const validChildren = frame.children.filter(c => {
+      if (!c.visible) return false;
+      if (c.type === "TEXT" && (c.characters.includes("SOCIAL LINKS") || c.characters.includes("FOOTER FEATURE"))) return false;
+      return true;
+    });
+    
+    const targetChildren = validChildren.length > 0 ? validChildren : frame.children;
+
+    // 3. Alignment logic
+    if ("layoutMode" in frame && frame.layoutMode !== "NONE") {
+      const isHorizontal = frame.layoutMode === "HORIZONTAL";
+      
+      // Force FIXED so alignment has space to work within the frame width
+      if (isHorizontal) frame.primaryAxisSizingMode = "FIXED";
+      else frame.counterAxisSizingMode = "FIXED";
+
+      if (alignment === "right") {
+        if (isHorizontal) frame.primaryAxisAlignItems = "MAX";
+        else frame.counterAxisAlignItems = "MAX";
+      } else if (alignment === "center") {
+        frame.primaryAxisAlignItems = "CENTER";
+        frame.counterAxisAlignItems = "CENTER";
+      } else {
+        if (isHorizontal) frame.primaryAxisAlignItems = "MIN";
+        else frame.counterAxisAlignItems = "MIN";
+      }
+    } else {
+      // Manual shift for regular frames
+      const minX = Math.min(...targetChildren.map(c => c.x));
+      const maxX = Math.max(...targetChildren.map(c => c.x + c.width));
+      
+      let offset = 0;
+      if (alignment === "right") {
+        offset = frame.width - maxX;
+      } else if (alignment === "center") {
+        const contentWidth = maxX - minX;
+        offset = (frame.width - contentWidth) / 2 - minX;
+      } else {
+        offset = -minX;
+      }
+
+      frame.children.forEach(child => {
+        child.x += offset;
+      });
+    }
+  }
 
   function createFooter(width, height, isMobile) {
     const frame = figma.createFrame();
@@ -67,15 +134,14 @@ async function run() {
     frame.name = `Footer - ${width}x${height}${isMobile ? ' (Mobile)' : ''}`;
 
     if (isMobile) {
-      // Mobile: Fixed column width of 85px
-      const colWidth = 85;
-      const totalLinksWidth = colWidth * linksArray.length;
-      const mobileWidth = totalLinksWidth + (padding * 2);
-      
-      // Update frame width to fit the links
+      // Mobile: Fixed width of 390px
+      const mobileWidth = 390;
       frame.resize(mobileWidth, height);
 
-      // Calculate max height for mobile links to align them properly
+      // Mobile: Fixed column width of 72px for links
+      const colWidth = 72;
+      
+      // Calculate max height for mobile links
       const textNodes = [];
       linksArray.forEach((link, index) => {
         const text = figma.createText();
@@ -90,24 +156,36 @@ async function run() {
       });
 
       const maxTextHeight = Math.max(...textNodes.map(t => t.height));
-      const rowCenterY = padding * 1.5 + (maxTextHeight / 2);
+      
+      let currentY = padding * 0.5;
+
+      // Handle Top Alignment: Social Links ABOVE Menu Links
+      if (social_align_mobile === "top" && socialLinksNode) {
+        const socialClone = socialLinksNode.clone();
+        frame.appendChild(socialClone);
+        socialClone.x = (mobileWidth - socialClone.width) / 2;
+        socialClone.y = currentY;
+        currentY += socialClone.height + 10; // 10px gap above menu links
+      }
+
+      const linksTotalWidth = colWidth * linksArray.length;
+      const startX = (mobileWidth - linksTotalWidth) / 2;
+      
+      const rowCenterY = currentY + (maxTextHeight / 2);
       
       textNodes.forEach((text, index) => {
         frame.appendChild(text);
         text.textAlignHorizontal = "CENTER";
         text.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
         
-        text.x = padding + (index * colWidth);
+        text.x = startX + (index * colWidth);
         text.y = rowCenterY - (text.height / 2);
 
         if (index < linksArray.length - 1 && sepNode) {
           const sepClone = sepNode.clone();
           frame.appendChild(sepClone);
-          
-          // Respect dimensions of the source sepNode
           sepClone.resize(sepNode.width, sepNode.height);
-          
-          sepClone.x = padding + (index + 1) * colWidth - (sepClone.width / 2);
+          sepClone.x = startX + (index + 1) * colWidth - (sepClone.width / 2);
           sepClone.y = rowCenterY - (sepClone.height / 2);
           
           sepClone.children.forEach(child => {
@@ -117,20 +195,29 @@ async function run() {
         }
       });
 
-      const maxLinkY = padding * 1.5 + maxTextHeight;
+      currentY += maxTextHeight + 8;
 
-      // Add Mobile Feature right below links, centered
+      // Add Mobile Feature
       if (featureMobileNode) {
         const featureClone = featureMobileNode.clone();
         frame.appendChild(featureClone);
-        featureClone.x = (frame.width - featureClone.width) / 2;
-        featureClone.y = maxLinkY + 20;
+        featureClone.x = (mobileWidth - featureClone.width) / 2;
+        featureClone.y = currentY;
+        currentY += featureClone.height + 10;
+      }
+
+      // Add Social Links if aligned to bottom
+      if (social_align_mobile === "bottom" && socialLinksNode) {
+        const socialClone = socialLinksNode.clone();
+        frame.appendChild(socialClone);
+        socialClone.x = (mobileWidth - socialClone.width) / 2;
+        socialClone.y = currentY;
       }
     } else {
-      // Desktop: Left-aligned group
+      // Desktop: Left-aligned group for links
       const items = [];
       let totalWidth = 0;
-      const gap = 10; // Tighter gap for desktop
+      const gap = 8; // Tighter gap for desktop
 
       linksArray.forEach((link, index) => {
         const text = figma.createText();
@@ -156,7 +243,7 @@ async function run() {
       });
 
       let currentX = padding;
-      const linksY = 30; // Position links near the top
+      const linksY = vPadding + 6; // Balanced top padding
       items.forEach(item => {
         frame.appendChild(item.node);
         if (item.type === 'TEXT') {
@@ -175,12 +262,51 @@ async function run() {
         }
       });
 
-      // Add Desktop Feature below links with tight padding
+      // Add Desktop Feature and Social Links
+      // Both "left" and "right" arrangements are side-by-side and bottom-aligned
+      const bottomY = height - vPadding;
+      
+      let fClone = null;
       if (featureDesktopNode) {
-        const featureClone = featureDesktopNode.clone();
-        frame.appendChild(featureClone);
-        featureClone.x = padding;
-        featureClone.y = linksY + 20; // Tight vertical gap
+        fClone = featureDesktopNode.clone();
+      }
+      
+      let sClone = null;
+      if (socialLinksNode) {
+        sClone = socialLinksNode.clone();
+      }
+
+      const h1 = fClone ? fClone.height : 0;
+      const h2 = sClone ? sClone.height : 0;
+
+      if (social_align_desktop === "right") {
+        // Feature Left, Social Right
+        if (fClone) {
+          frame.appendChild(fClone);
+          fClone.x = padding;
+          fClone.y = bottomY - h1;
+          alignFrameContent(fClone, "left");
+        }
+        if (sClone) {
+          frame.appendChild(sClone);
+          sClone.x = width - padding - sClone.width;
+          sClone.y = bottomY - h2;
+          alignFrameContent(sClone, "right");
+        }
+      } else {
+        // social_align_desktop === "left": Feature Right, Social Left
+        if (sClone) {
+          frame.appendChild(sClone);
+          sClone.x = padding;
+          sClone.y = bottomY - h2;
+          alignFrameContent(sClone, "left");
+        }
+        if (fClone) {
+          frame.appendChild(fClone);
+          fClone.x = width - padding - fClone.width;
+          fClone.y = bottomY - h1;
+          alignFrameContent(fClone, "right");
+        }
       }
     }
 
@@ -199,9 +325,9 @@ async function run() {
   resultSection.y = maxY + 100;
   
   const gap = 30;
-  const footer1920 = createFooter(1920, 100, false);
-  const footer1280 = createFooter(1280, 100, false);
-  const footer390 = createFooter(390, 250, true);
+  const footer1920 = createFooter(1920, 75, false);
+  const footer1280 = createFooter(1280, 75, false);
+  const footer390 = createFooter(390, 180, true);
 
   resultSection.appendChild(footer1920);
   resultSection.appendChild(footer1280);
