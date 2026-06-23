@@ -40,6 +40,14 @@ Once you have configured your parameters in the "Parameter Here" section, run th
     - Contains vertically stacked links with submenu chevrons aligned to the far right.
     - Includes a Heroicon close button at the top right.
 
+### 4. `/section.renamer`
+Dedicated to renaming and organizing banner items within a section.
+
+#### Features:
+- **Rename**: Inserts matched dimensions into the name (e.g., `home_deco_en` → `home_deco_1920x1080_en`).
+- **Organize**: Sorts by size (smallest to largest), stacks with a 60px gap, and aligns right.
+- **Auto-Size**: Resizes the section with 60px padding.
+
 ## How to Use
 1. Run `/input.section` to create the parameter block.
 2. Edit the values (Color, Links, Logo, etc.) directly on the Figma canvas.
