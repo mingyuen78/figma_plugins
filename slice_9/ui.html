@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; padding: 20px; font-size: 12px; display: flex; flex-direction: column; height: 100vh; margin: 0; box-sizing: border-box; }
+    .row { margin-bottom: 8px; display: flex; align-items: center; }
+    label { width: 50%; }
+    input { width: 50%; padding: 4px; box-sizing: border-box; }
+    button { width: 100%; padding: 8px; background: #18A0FB; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+    textarea { width: 100%; height: 60px; margin-top: 10px; font-family: monospace; font-size: 11px; padding: 5px; box-sizing: border-box; flex-shrink: 0; }
+    
+    .preview-container { 
+      width: 100%; 
+      height: 400px; 
+      background: #eee; 
+      margin-top: 10px; 
+      overflow: auto;
+      position: relative;
+      border: 1px solid #ccc;
+      flex-shrink: 0;
+    }
+    .image-wrapper {
+      position: relative;
+      display: inline-block;
+      transform-origin: top left;
+    }
+    #preview-img { 
+      display: block;
+      max-height: 400px; 
+      image-rendering: pixelated; /* Helpful for precise slicing */
+    }
+    .guide {
+      position: absolute;
+      background: rgba(255, 0, 0, 0.7);
+      pointer-events: none;
+    }
+    .guide-v { width: 1px; height: 100%; top: 0; }
+    .guide-h { height: 1px; width: 100%; left: 0; }
+    
+    .controls { flex: 1; overflow-y: auto; margin-top: 10px; padding-right: 5px; }
+  </style>
+</head>
+<body>
+  <div id="no-selection">Please select an object in Figma.</div>
+  
+  <div id="main-ui" style="display: none; height: 100%; display: flex; flex-direction: column;">
+    <div class="row" style="margin-top: 0;">
+      <label>Zoom</label>
+      <input type="range" id="zoom" min="1" max="10" step="0.5" value="1">
+    </div>
+    
+    <div class="preview-container" id="container">
+      <div class="image-wrapper" id="image-wrapper">
+        <img id="preview-img" src="">
+        <div id="guide-t" class="guide guide-h"></div>
+        <div id="guide-r" class="guide guide-v"></div>
+        <div id="guide-b" class="guide guide-h"></div>
+        <div id="guide-l" class="guide guide-v"></div>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <div style="margin: 5px 0;"><strong>Slice Offsets (px)</strong></div>
+      <div class="row"><label>Top</label><input type="number" id="t" value="20"></div>
+      <div class="row"><label>Right</label><input type="number" id="r" value="20"></div>
+      <div class="row"><label>Bottom</label><input type="number" id="b" value="20"></div>
+      <div class="row"><label>Left</label><input type="number" id="l" value="20"></div>
+      
+      <button id="generate">Generate CSS</button>
+      <textarea id="output" readonly placeholder="Tailwind CSS will appear here..."></textarea>
+    </div>
+  </div>
+
+  <script>
+    const output = document.getElementById('output');
+    const preview = document.getElementById('preview-img');
+    const mainUi = document.getElementById('main-ui');
+    const noSelection = document.getElementById('no-selection');
+    const wrapper = document.getElementById('image-wrapper');
+    const zoomInput = document.getElementById('zoom');
+    
+    let originalWidth = 0;
+    let originalHeight = 0;
+
+    function updateGuides() {
+      if (!originalWidth || !originalHeight) return;
+      
+      const zoom = parseFloat(zoomInput.value);
+      const displayWidth = originalWidth * zoom;
+      const displayHeight = originalHeight * zoom;
+      
+      preview.style.width = displayWidth + 'px';
+      preview.style.height = displayHeight + 'px';
+      
+      const t = document.getElementById('t').value;
+      const r = document.getElementById('r').value;
+      const b = document.getElementById('b').value;
+      const l = document.getElementById('l').value;
+      
+      document.getElementById('guide-t').style.top = (t * zoom) + 'px';
+      document.getElementById('guide-r').style.right = (r * zoom) + 'px';
+      document.getElementById('guide-b').style.bottom = (b * zoom) + 'px';
+      document.getElementById('guide-l').style.left = (l * zoom) + 'px';
+    }
+
+    ['t', 'r', 'b', 'l'].forEach(id => {
+      document.getElementById(id).oninput = updateGuides;
+    });
+    
+    zoomInput.oninput = updateGuides;
+
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      
+      if (msg.type === 'selection-change') {
+        if (msg.selected) {
+          mainUi.style.display = 'flex';
+          noSelection.style.display = 'none';
+          if (msg.imageData) {
+            preview.src = `data:image/png;base64,${msg.imageData}`;
+            originalWidth = msg.width;
+            originalHeight = msg.height;
+            
+            if (msg.autoOffsets) {
+              document.getElementById('t').value = msg.autoOffsets.t;
+              document.getElementById('b').value = msg.autoOffsets.b;
+              document.getElementById('l').value = msg.autoOffsets.l;
+              document.getElementById('r').value = msg.autoOffsets.r;
+            }
+            
+            preview.onload = updateGuides;
+          }
+        } else {
+          mainUi.style.display = 'none';
+          noSelection.style.display = 'block';
+        }
+      } else if (msg.type === 'css-result') {
+        output.value = msg.css;
+        output.select();
+      }
+    };
+
+    document.getElementById('generate').onclick = () => {
+      const t = document.getElementById('t').value;
+      const r = document.getElementById('r').value;
+      const b = document.getElementById('b').value;
+      const l = document.getElementById('l').value;
+      parent.postMessage({ pluginMessage: { type: 'generate-css', t, r, b, l } }, '*');
+    };
+  </script>
+</body>
+</html>

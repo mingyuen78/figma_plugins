@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; padding: 20px; box-sizing: border-box; }
+    .row { margin-bottom: 12px; display: flex; align-items: center; width: 100%; }
+    label { width: 50%; font-size: 12px; flex-shrink: 0; }
+    input { width: 50%; padding: 4px; font-size: 12px; height: 28px; box-sizing: border-box; flex-shrink: 0; }
+    button { width: 100%; padding: 8px; background: #18A0FB; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="row">
+    <label>Color</label>
+    <input type="color" id="color" value="#FFFFFF">
+  </div>
+  <div class="row">
+    <label>Offset X</label>
+    <input type="number" id="x" value="0">
+  </div>
+  <div class="row">
+    <label>Offset Y</label>
+    <input type="number" id="y" value="0">
+  </div>
+  <div class="row">
+    <label>Blur</label>
+    <input type="number" id="blur" value="20">
+  </div>
+  <button id="apply">Neonize</button>
+
+  <script>
+    document.getElementById('apply').onclick = () => {
+      const color = document.getElementById('color').value.replace('#', '');
+      const x = parseInt(document.getElementById('x').value);
+      const y = parseInt(document.getElementById('y').value);
+      const blur = parseInt(document.getElementById('blur').value);
+      
+      parent.postMessage({ pluginMessage: { type: 'apply-glow', color, x, y, blur } }, '*');
+    };
+  </script>
+</body>
+</html>
