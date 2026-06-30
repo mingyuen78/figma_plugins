@@ -61,7 +61,7 @@ figma.ui.onmessage = async (msg) => {
     }
 
     const node = selection[0];
-    const name = node.name.toLowerCase().replace(/[^a-z0-t0-9]/g, '-');
+    const name = node.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
     const filename = `${name}-9slice.png`;
     
     const { t, r, b, l } = msg;
