@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; padding: 20px; box-sizing: border-box; }
+    .row { margin-bottom: 12px; display: flex; align-items: center; width: 100%; }
+    label { width: 50%; font-size: 12px; flex-shrink: 0; }
+    select, input { width: 50%; padding: 4px; font-size: 12px; height: 28px; box-sizing: border-box; flex-shrink: 0; }
+    button { width: 100%; padding: 8px; background: #18A0FB; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="row">
+    <label>Resolution</label>
+    <select id="resolution">
+      <option value="1280x550">1280 x 550</option>
+      <option value="1280x585">1280 x 585</option>
+      <option value="1280x665">1280 x 665</option>
+      <option value="1280x695">1280 x 695</option>
+      <option value="1536x695">1536 x 695</option>
+      <option value="1536x730">1536 x 730</option>
+      <option value="1536x826">1536 x 826</option>
+      <option value="1707x825">1707 x 825</option>
+      <option value="1920x1080">1920 x 1080</option>
+      <option value="2880x1418">2880 x 1418</option>
+      <option value="2880x1367">2880 x 1367</option>
+    </select>
+  </div>
+  <div class="row">
+    <label>Frame Color</label>
+    <input type="color" id="baseColor" value="#FFFFFF">
+  </div>
+  <button id="create">Create View</button>
+
+  <script>
+    document.getElementById('create').onclick = () => {
+      const resolution = document.getElementById('resolution').value;
+      const baseColor = document.getElementById('baseColor').value;
+      const [width, height] = resolution.split('x').map(Number);
+      
+      parent.postMessage({ pluginMessage: { type: 'create-view', width, height, baseColor } }, '*');
+    };
+  </script>
+</body>
+</html>

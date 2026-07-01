@@ -19,7 +19,7 @@ async function run() {
   const socialAlignDesktopNode = section.findOne(n => n.name === "param_social_align_desktop" && n.type === "TEXT");
   const socialAlignMobileNode = section.findOne(n => n.name === "param_social_align_mobile" && n.type === "TEXT");
 
-  const base_color = colorNode ? colorNode.characters : "#006937";
+  const base_color = colorNode ? colorNode.characters.trim() : "#006937";
   const footer_links = footerLinksNode ? footerLinksNode.characters : "Terms & Conditions, FAQ, Privacy Policy, Contact Us";
   const social_align_desktop = socialAlignDesktopNode ? socialAlignDesktopNode.characters.toLowerCase().trim() : "right";
   const social_align_mobile = socialAlignMobileNode ? socialAlignMobileNode.characters.toLowerCase().trim() : "top";
@@ -54,7 +54,11 @@ async function run() {
   });
 
   function hexToRgb(hex) {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    let c = hex.replace(/^#/, '');
+    if (c.length === 3) {
+      c = c.split('').map(x => x + x).join('');
+    }
+    const result = /^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(c);
     return result ? {
       r: parseInt(result[1], 16) / 255,
       g: parseInt(result[2], 16) / 255,
@@ -324,7 +328,7 @@ async function run() {
   resultSection.name = "Generated Footers";
   resultSection.y = maxY + 100;
   
-  const gap = 30;
+  const gap = 120;
   const footer1920 = createFooter(1920, 75, false);
   const footer1280 = createFooter(1280, 75, false);
   const footer390 = createFooter(390, 180, true);

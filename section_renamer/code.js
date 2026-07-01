@@ -13,7 +13,7 @@ const targetDimensions = [
 ];
 
 const tolerance = 5;
-const gap = 60;
+const gap = 120;
 const padding = 60;
 
 function findClosestDimension(width, height) {
