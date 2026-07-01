@@ -67,16 +67,19 @@ figma.ui.onmessage = async (msg) => {
     const { t, r, b, l } = msg;
     
     // Tailwind / CSS border-image syntax
-    const css = `/* 9-patch for ${filename} */
-.slice-9-${name} {
-  border-image-source: url('/assets/images/${filename}');
-  border-image-slice: ${t} ${r} ${b} ${l} fill;
-  border-width: ${t}px ${r}px ${b}px ${l}px;
-  border-style: solid;
-}
+    const css = `<style>
+    /* 9-patch for ${filename} */
+    .slice-9-${name} {
+        border-image-source: url('${filename}');
+        border-image-slice: ${t} ${r} ${b} ${l} fill;
+        border-width: ${t}px ${r}px ${b}px ${l}px;
+        border-style: solid;
+        border-color: transparent;
+        border-image-repeat: round;
+    }
+</style>
 
-/* Tailwind utility version */
-<div class="border-solid border-[url('/assets/images/${filename}')] [border-image-slice:${t}_${r}_${b}_${l}_fill] border-[${t}px_${r}px_${b}px_${l}px]"></div>`;
+<div class="slice-9-${name} w-full h-svh"></div>`;
 
     figma.ui.postMessage({ type: 'css-result', css: css });
     figma.notify("CSS Generated!");
