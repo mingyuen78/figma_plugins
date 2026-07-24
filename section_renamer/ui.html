@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      padding: 16px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 12px;
+    }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 8px;
+      border: 1px solid #e5e5e5;
+      border-radius: 4px;
+      outline: none;
+    }
+    input:focus {
+      border-color: #18a0fb;
+    }
+    .buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    button {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    #rename {
+      background-color: #18a0fb;
+      color: white;
+    }
+    #cancel {
+      background-color: transparent;
+      color: #333;
+      border: 1px solid #e5e5e5;
+    }
+    label {
+      font-weight: 600;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <label for="keywords">Keywords to preserve (comma separated):</label>
+  <input type="text" id="keywords" placeholder="e.g. MONT, TONT" autofocus>
+  <div class="buttons">
+    <button id="cancel">Cancel</button>
+    <button id="rename">Rename</button>
+  </div>
+
+  <script>
+    document.getElementById('rename').onclick = () => {
+      const keywords = document.getElementById('keywords').value
+        .split(',')
+        .map(s => s.trim())
+        .filter(s => s.length > 0);
+      parent.postMessage({ pluginMessage: { type: 'rename', keywords } }, '*');
+    };
+
+    document.getElementById('cancel').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    };
+
+    // Handle Enter key
+    document.getElementById('keywords').onkeydown = (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('rename').click();
+      }
+    };
+  </script>
+</body>
+</html>
