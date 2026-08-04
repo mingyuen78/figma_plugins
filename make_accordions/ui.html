@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #2c2c2c; color: white; }
+    .row { display: flex; align-items: center; margin-bottom: 12px; width: 100%; }
+    label { flex: 1; font-size: 11px; color: #ccc; }
+    input[type="number"], input[type="text"] { 
+      width: 100px; 
+      padding: 4px; 
+      font-size: 12px; 
+      background: #444; 
+      color: white; 
+      border: 1px solid #666; 
+      border-radius: 4px; 
+    }
+    input[type="color"] {
+      width: 30px;
+      height: 24px;
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+    button { 
+      width: 100%; 
+      padding: 10px; 
+      background: #9eff00; 
+      color: black; 
+      border: none; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      font-weight: bold; 
+      margin-top: 10px; 
+    }
+    button:hover { background: #8ada00; }
+  </style>
+</head>
+<body>
+  <h3 style="margin-top: 0;">Accordion Maker</h3>
+  <div class="row">
+    <label>Items Count</label>
+    <input type="number" id="count" value="5" min="1">
+  </div>
+  <div class="row">
+    <label>Font Family</label>
+    <input type="text" id="fontFamily" value="Inter">
+  </div>
+  <div class="row">
+    <label>Text Color</label>
+    <input type="color" id="textColor" value="#006937">
+  </div>
+  <div class="row">
+    <label>Bg Color</label>
+    <input type="color" id="bgColor" value="#9EFF00">
+  </div>
+  <button id="create">Create Accordions</button>
+
+  <script>
+    document.getElementById('create').onclick = () => {
+      const count = parseInt(document.getElementById('count').value);
+      const fontFamily = document.getElementById('fontFamily').value;
+      const textColor = document.getElementById('textColor').value;
+      const bgColor = document.getElementById('bgColor').value;
+      
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'create-accordions', 
+          count, 
+          fontFamily, 
+          textColor, 
+          bgColor 
+        } 
+      }, '*');
+    };
+  </script>
+</body>
+</html>

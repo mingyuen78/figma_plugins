@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #2c2c2c; color: white; margin: 0; display: flex; flex-direction: column; height: 100vh; box-sizing: border-box; }
+    h3 { margin-top: 0; }
+    textarea { flex-grow: 1; background: #1e1e1e; color: #d4d4d4; border: 1px solid #444; border-radius: 4px; padding: 10px; font-family: monospace; font-size: 11px; resize: none; margin-bottom: 10px; }
+    button { padding: 10px; background: #18A0FB; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    button:hover { background: #0d8de3; }
+  </style>
+</head>
+<body>
+  <h3>Design to Script Export</h3>
+  <textarea id="output" readonly placeholder="Select something in Figma and click Export..."></textarea>
+  <button id="export">Export Selection</button>
+  <button id="copy" style="margin-top: 10px; background: #444;">Copy Code</button>
+
+  <script>
+    const output = document.getElementById('output');
+    
+    document.getElementById('export').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'run-export' } }, '*');
+    };
+
+    document.getElementById('copy').onclick = () => {
+      output.select();
+      document.execCommand('copy');
+      alert('Code copied to clipboard!');
+    };
+
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (msg.type === 'export-result') {
+        output.value = msg.code;
+      }
+    };
+  </script>
+</body>
+</html>

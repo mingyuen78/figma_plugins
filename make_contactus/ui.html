@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #2c2c2c; color: white; text-align: center; }
+    .options { display: flex; gap: 10px; margin-bottom: 20px; }
+    .option { 
+      flex: 1; 
+      padding: 15px; 
+      border: 2px solid #444; 
+      border-radius: 8px; 
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .option:hover { border-color: #18A0FB; }
+    .option.selected { border-color: #18A0FB; background: rgba(24, 160, 251, 0.1); }
+    button { 
+      width: 100%; 
+      padding: 12px; 
+      background: #18A0FB; 
+      color: white; 
+      border: none; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      font-weight: bold; 
+    }
+  </style>
+</head>
+<body>
+  <h3>Select Layout</h3>
+  <div class="options">
+    <div class="option" id="desktop-opt">Desktop</div>
+    <div class="option" id="mobile-opt">Mobile</div>
+  </div>
+  
+  <div style="text-align: left; margin-bottom: 20px;">
+    <label style="font-size: 12px; display: block; margin-bottom: 8px;">Font Family</label>
+    <input type="text" id="font-family" value="Inter" style="width: 100%; padding: 8px; box-sizing: border-box; background: #444; border: 1px solid #666; color: white; border-radius: 4px;">
+  </div>
+
+  <button id="create">Create Layout</button>
+
+  <script>
+    let selectedMode = 'desktop';
+    const dOpt = document.getElementById('desktop-opt');
+    const mOpt = document.getElementById('mobile-opt');
+    const fontInput = document.getElementById('font-family');
+
+    dOpt.onclick = () => { selectedMode = 'desktop'; updateSelection(); };
+    mOpt.onclick = () => { selectedMode = 'mobile'; updateSelection(); };
+
+    function updateSelection() {
+      dOpt.classList.toggle('selected', selectedMode === 'desktop');
+      mOpt.classList.toggle('selected', selectedMode === 'mobile');
+    }
+    updateSelection();
+
+    document.getElementById('create').onclick = () => {
+      const fontFamily = fontInput.value || 'Inter';
+      parent.postMessage({ pluginMessage: { type: 'create-contact-us', mode: selectedMode, fontFamily } }, '*');
+    };
+  </script>
+</body>
+</html>

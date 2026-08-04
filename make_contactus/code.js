@@ -1,0 +1,869 @@
+figma.showUI(__html__, { width: 300, height: 260 });
+
+async function createDesktop(fontFamily) {
+  const fontBold = { family: fontFamily, style: "Bold" };
+
+  try {
+    await figma.loadFontAsync(fontBold);
+  } catch (e) {
+    figma.notify(`Font "${fontFamily} Bold" not found. Falling back to Inter.`);
+    await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+    fontBold.family = "Inter";
+  }
+
+  const node0 = figma.createFrame();
+  node0.name = "Contact Fields Section";
+  node0.layoutMode = "VERTICAL";
+  node0.itemSpacing = 32;
+  node0.paddingLeft = 20;
+  node0.paddingRight = 20;
+  node0.paddingTop = 40;
+  node0.paddingBottom = 40;
+  node0.primaryAxisSizingMode = "FIXED";
+  node0.counterAxisSizingMode = "FIXED";
+  node0.primaryAxisAlignItems = "MIN";
+  node0.counterAxisAlignItems = "MIN";
+  node0.resize(1024, 1260);
+  node0.layoutAlign = "INHERIT";
+  node0.layoutGrow = 0;
+  node0.fills = [];
+  figma.currentPage.appendChild(node0);
+
+  const node1 = figma.createFrame();
+  node1.name = "Name & Email Row";
+  node1.layoutMode = "HORIZONTAL";
+  node1.itemSpacing = 32;
+  node1.paddingLeft = 0;
+  node1.paddingRight = 0;
+  node1.paddingTop = 0;
+  node1.paddingBottom = 0;
+  node1.primaryAxisSizingMode = "FIXED";
+  node1.counterAxisSizingMode = "AUTO";
+  node1.primaryAxisAlignItems = "MIN";
+  node1.counterAxisAlignItems = "MIN";
+  node1.resize(984, 105);
+  node1.clipsContent = true;
+  node1.layoutAlign = "STRETCH";
+  node1.layoutGrow = 0;
+  node1.fills = [];
+  node0.appendChild(node1);
+
+  const node2 = figma.createFrame();
+  node2.name = "Name Field";
+  node2.layoutMode = "VERTICAL";
+  node2.itemSpacing = 12;
+  node2.paddingLeft = 0;
+  node2.paddingRight = 0;
+  node2.paddingTop = 0;
+  node2.paddingBottom = 0;
+  node2.primaryAxisSizingMode = "AUTO";
+  node2.counterAxisSizingMode = "FIXED";
+  node2.primaryAxisAlignItems = "MIN";
+  node2.counterAxisAlignItems = "MIN";
+  node2.resize(476, 105);
+  node2.clipsContent = true;
+  node2.layoutAlign = "INHERIT";
+  node2.layoutGrow = 1;
+  node2.fills = [];
+  node1.appendChild(node2);
+
+  const node3 = figma.createText();
+  node3.name = "Name";
+  node3.fontName = fontBold;
+  node3.characters = "Name";
+  node3.fontSize = 24;
+  node3.lineHeight = { unit: "AUTO" };
+  node3.letterSpacing = { unit: "PERCENT", value: 0 };
+  node3.resize(68, 29);
+  node3.layoutAlign = "INHERIT";
+  node3.layoutGrow = 0;
+  node3.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node2.appendChild(node3);
+
+  const node4 = figma.createFrame();
+  node4.name = "Field - Name Input Box";
+  node4.layoutMode = "HORIZONTAL";
+  node4.itemSpacing = 0;
+  node4.paddingLeft = 20;
+  node4.paddingRight = 0;
+  node4.paddingTop = 0;
+  node4.paddingBottom = 0;
+  node4.primaryAxisSizingMode = "FIXED";
+  node4.counterAxisSizingMode = "FIXED";
+  node4.primaryAxisAlignItems = "MIN";
+  node4.counterAxisAlignItems = "CENTER";
+  node4.resize(476, 64);
+  node4.clipsContent = true;
+  node4.cornerRadius = 16;
+  node4.layoutAlign = "STRETCH";
+  node4.layoutGrow = 0;
+  node4.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node2.appendChild(node4);
+
+  const node5 = figma.createText();
+  node5.name = "Full Name Here...";
+  node5.fontName = fontBold;
+  node5.characters = "Full Name Here...";
+  node5.fontSize = 20;
+  node5.lineHeight = { unit: "AUTO" };
+  node5.letterSpacing = { unit: "PERCENT", value: 0 };
+  node5.resize(165, 24);
+  node5.layoutAlign = "INHERIT";
+  node5.layoutGrow = 0;
+  node5.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  node4.appendChild(node5);
+
+  const node6 = figma.createFrame();
+  node6.name = "Email Field";
+  node6.layoutMode = "VERTICAL";
+  node6.itemSpacing = 12;
+  node6.paddingLeft = 0;
+  node6.paddingRight = 0;
+  node6.paddingTop = 0;
+  node6.paddingBottom = 0;
+  node6.primaryAxisSizingMode = "AUTO";
+  node6.counterAxisSizingMode = "FIXED";
+  node6.primaryAxisAlignItems = "MIN";
+  node6.counterAxisAlignItems = "MIN";
+  node6.resize(476, 105);
+  node6.clipsContent = true;
+  node6.layoutAlign = "INHERIT";
+  node6.layoutGrow = 1;
+  node6.fills = [];
+  node1.appendChild(node6);
+
+  const node7 = figma.createText();
+  node7.name = "Email";
+  node7.fontName = fontBold;
+  node7.characters = "Email";
+  node7.fontSize = 24;
+  node7.lineHeight = { unit: "AUTO" };
+  node7.letterSpacing = { unit: "PERCENT", value: 0 };
+  node7.resize(64, 29);
+  node7.layoutAlign = "INHERIT";
+  node7.layoutGrow = 0;
+  node7.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node6.appendChild(node7);
+
+  const node8 = figma.createFrame();
+  node8.name = "Field - Email Input Box";
+  node8.layoutMode = "HORIZONTAL";
+  node8.itemSpacing = 0;
+  node8.paddingLeft = 20;
+  node8.paddingRight = 0;
+  node8.paddingTop = 0;
+  node8.paddingBottom = 0;
+  node8.primaryAxisSizingMode = "FIXED";
+  node8.counterAxisSizingMode = "FIXED";
+  node8.primaryAxisAlignItems = "MIN";
+  node8.counterAxisAlignItems = "CENTER";
+  node8.resize(476, 64);
+  node8.clipsContent = true;
+  node8.cornerRadius = 16;
+  node8.layoutAlign = "STRETCH";
+  node8.layoutGrow = 0;
+  node8.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node6.appendChild(node8);
+
+  const node9 = figma.createText();
+  node9.name = "e.g. johndoe@email.com";
+  node9.fontName = fontBold;
+  node9.characters = "e.g. johndoe@email.com";
+  node9.fontSize = 20;
+  node9.lineHeight = { unit: "AUTO" };
+  node9.letterSpacing = { unit: "PERCENT", value: 0 };
+  node9.resize(242, 24);
+  node9.layoutAlign = "INHERIT";
+  node9.layoutGrow = 0;
+  node9.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  node8.appendChild(node9);
+
+  const node10 = figma.createFrame();
+  node10.name = "Mobile No Set";
+  node10.layoutMode = "VERTICAL";
+  node10.itemSpacing = 15;
+  node10.paddingLeft = 0;
+  node10.paddingRight = 0;
+  node10.paddingTop = 0;
+  node10.paddingBottom = 0;
+  node10.primaryAxisSizingMode = "AUTO";
+  node10.counterAxisSizingMode = "FIXED";
+  node10.primaryAxisAlignItems = "MIN";
+  node10.counterAxisAlignItems = "MIN";
+  node10.resize(984, 108);
+  node10.layoutAlign = "STRETCH";
+  node10.layoutGrow = 0;
+  node10.fills = [];
+  node0.appendChild(node10);
+
+  const node11 = figma.createText();
+  node11.name = "Mobile Number";
+  node11.fontName = fontBold;
+  node11.characters = "Mobile Number";
+  node11.fontSize = 24;
+  node11.lineHeight = { unit: "AUTO" };
+  node11.letterSpacing = { unit: "PERCENT", value: 0 };
+  node11.resize(179, 29);
+  node11.layoutAlign = "INHERIT";
+  node11.layoutGrow = 0;
+  node11.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node10.appendChild(node11);
+
+  const node12 = figma.createFrame();
+  node12.name = "Mobile No Input Container";
+  node12.layoutMode = "HORIZONTAL";
+  node12.itemSpacing = 20;
+  node12.paddingLeft = 0;
+  node12.paddingRight = 0;
+  node12.paddingTop = 0;
+  node12.paddingBottom = 0;
+  node12.primaryAxisSizingMode = "FIXED";
+  node12.counterAxisSizingMode = "AUTO";
+  node12.primaryAxisAlignItems = "MIN";
+  node12.counterAxisAlignItems = "CENTER";
+  node12.resize(984, 64);
+  node12.layoutAlign = "STRETCH";
+  node12.layoutGrow = 0;
+  node12.fills = [];
+  node10.appendChild(node12);
+
+  const node13 = figma.createFrame();
+  node13.name = "Field - Country Code Box";
+  node13.layoutMode = "HORIZONTAL";
+  node13.itemSpacing = 0;
+  node13.paddingLeft = 0;
+  node13.paddingRight = 0;
+  node13.paddingTop = 0;
+  node13.paddingBottom = 0;
+  node13.primaryAxisSizingMode = "FIXED";
+  node13.counterAxisSizingMode = "FIXED";
+  node13.primaryAxisAlignItems = "CENTER";
+  node13.counterAxisAlignItems = "CENTER";
+  node13.resize(80, 64);
+  node13.clipsContent = true;
+  node13.cornerRadius = 16;
+  node13.layoutAlign = "INHERIT";
+  node13.layoutGrow = 0;
+  node13.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node12.appendChild(node13);
+
+  const node14 = figma.createText();
+  node14.name = "+60";
+  node14.fontName = fontBold;
+  node14.characters = "+60 ";
+  node14.fontSize = 20;
+  node14.lineHeight = { unit: "AUTO" };
+  node14.letterSpacing = { unit: "PERCENT", value: 0 };
+  node14.resize(41, 24);
+  node14.layoutAlign = "INHERIT";
+  node14.layoutGrow = 0;
+  node14.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  node13.appendChild(node14);
+
+  const node15 = figma.createFrame();
+  node15.name = "Field - Mobile Input Container";
+  node15.layoutMode = "HORIZONTAL";
+  node15.itemSpacing = 12;
+  node15.paddingLeft = 20;
+  node15.paddingRight = 20;
+  node15.paddingTop = 0;
+  node15.paddingBottom = 0;
+  node15.primaryAxisSizingMode = "FIXED";
+  node15.counterAxisSizingMode = "FIXED";
+  node15.primaryAxisAlignItems = "MIN";
+  node15.counterAxisAlignItems = "CENTER";
+  node15.resize(884, 64);
+  node15.clipsContent = true;
+  node15.cornerRadius = 16;
+  node15.layoutAlign = "INHERIT";
+  node15.layoutGrow = 0;
+  node15.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node12.appendChild(node15);
+
+  const node16 = figma.createText();
+  node16.name = "e.g. 127654321";
+  node16.fontName = fontBold;
+  node16.characters = "e.g. 127654321 ";
+  node16.fontSize = 20;
+  node16.lineHeight = { unit: "AUTO" };
+  node16.letterSpacing = { unit: "PERCENT", value: 0 };
+  node16.resize(150, 24);
+  node16.layoutAlign = "INHERIT";
+  node16.layoutGrow = 0;
+  node16.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  node15.appendChild(node16);
+
+  const node17 = figma.createFrame();
+  node17.name = "Category Set";
+  node17.layoutMode = "VERTICAL";
+  node17.itemSpacing = 15;
+  node17.paddingLeft = 0;
+  node17.paddingRight = 0;
+  node17.paddingTop = 0;
+  node17.paddingBottom = 0;
+  node17.primaryAxisSizingMode = "AUTO";
+  node17.counterAxisSizingMode = "AUTO";
+  node17.primaryAxisAlignItems = "MIN";
+  node17.counterAxisAlignItems = "MIN";
+  node17.resize(984, 374);
+  node17.layoutAlign = "INHERIT";
+  node17.layoutGrow = 0;
+  node17.fills = [];
+  node0.appendChild(node17);
+
+  const node18 = figma.createText();
+  node18.name = "Category";
+  node18.fontName = fontBold;
+  node18.characters = "Category";
+  node18.fontSize = 24;
+  node18.lineHeight = { unit: "AUTO" };
+  node18.letterSpacing = { unit: "PERCENT", value: 0 };
+  node18.resize(110, 29);
+  node18.layoutAlign = "INHERIT";
+  node18.layoutGrow = 0;
+  node18.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node17.appendChild(node18);
+
+  const node19 = figma.createFrame();
+  node19.name = "category container";
+  node19.layoutMode = "VERTICAL";
+  node19.itemSpacing = 15;
+  node19.paddingLeft = 0;
+  node19.paddingRight = 0;
+  node19.paddingTop = 0;
+  node19.paddingBottom = 0;
+  node19.primaryAxisSizingMode = "AUTO";
+  node19.counterAxisSizingMode = "FIXED";
+  node19.primaryAxisAlignItems = "MIN";
+  node19.counterAxisAlignItems = "MIN";
+  node19.resize(984, 330);
+  node19.layoutAlign = "INHERIT";
+  node19.layoutGrow = 0;
+  node19.fills = [];
+  node17.appendChild(node19);
+
+  const createCatRow = (name, labels) => {
+    const row = figma.createFrame();
+    row.name = name;
+    row.layoutMode = "HORIZONTAL";
+    row.itemSpacing = 25;
+    row.primaryAxisSizingMode = "FIXED";
+    row.counterAxisSizingMode = "AUTO";
+    row.primaryAxisAlignItems = (name === "row3") ? "CENTER" : "MIN";
+    row.counterAxisAlignItems = "MIN";
+    row.resize(984, 100);
+    row.layoutAlign = "STRETCH";
+    row.fills = [];
+    labels.forEach((label) => {
+      const cat = figma.createFrame();
+      cat.name = (name === "row3") ? "cat_final" : "Frame";
+      cat.resize(479.5, 100);
+      cat.clipsContent = true;
+      cat.cornerRadius = 12;
+      cat.layoutGrow = (name === "row3") ? 0 : 1;
+      cat.layoutMode = "HORIZONTAL";
+      cat.primaryAxisSizingMode = "FIXED";
+      cat.counterAxisSizingMode = "FIXED";
+      cat.primaryAxisAlignItems = "CENTER";
+      cat.counterAxisAlignItems = "CENTER";
+      cat.fills = [];
+      cat.strokes = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+      cat.strokeWeight = 2;
+      cat.strokeAlign = "INSIDE";
+      const txt = figma.createText();
+      txt.characters = label;
+      txt.fontName = fontBold;
+      txt.fontSize = 24;
+      txt.lineHeight = { unit: "AUTO" };
+      txt.letterSpacing = { unit: "PERCENT", value: 0 };
+      txt.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+      cat.appendChild(txt);
+      row.appendChild(cat);
+    });
+    return row;
+  };
+
+  node19.appendChild(createCatRow("row1", ["Check Status", "Defects"]));
+  node19.appendChild(createCatRow("row2", ["Did Not Receive Parcels", "Appeal Status"]));
+  node19.appendChild(createCatRow("row3", ["Others"]));
+
+  const node33 = figma.createFrame();
+  node33.name = "Subject Set";
+  node33.layoutMode = "VERTICAL";
+  node33.itemSpacing = 12;
+  node33.paddingLeft = 0;
+  node33.paddingRight = 0;
+  node33.paddingTop = 0;
+  node33.paddingBottom = 0;
+  node33.primaryAxisSizingMode = "AUTO";
+  node33.counterAxisSizingMode = "FIXED";
+  node33.primaryAxisAlignItems = "MIN";
+  node33.counterAxisAlignItems = "MIN";
+  node33.resize(984, 105);
+  node33.clipsContent = true;
+  node33.layoutAlign = "STRETCH";
+  node33.layoutGrow = 0;
+  node33.fills = [];
+  node0.appendChild(node33);
+
+  const node34 = figma.createText();
+  node34.name = "Subject";
+  node34.fontName = fontBold;
+  node34.characters = "Subject";
+  node34.fontSize = 24;
+  node34.lineHeight = { unit: "AUTO" };
+  node34.letterSpacing = { unit: "PERCENT", value: 0 };
+  node34.resize(91, 29);
+  node34.layoutAlign = "INHERIT";
+  node34.layoutGrow = 0;
+  node34.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node33.appendChild(node34);
+
+  const node35 = figma.createFrame();
+  node35.name = "Field - Subject Input Box";
+  node35.layoutMode = "HORIZONTAL";
+  node35.itemSpacing = 0;
+  node35.paddingLeft = 20;
+  node35.paddingRight = 0;
+  node35.paddingTop = 0;
+  node35.paddingBottom = 0;
+  node35.primaryAxisSizingMode = "FIXED";
+  node35.counterAxisSizingMode = "FIXED";
+  node35.primaryAxisAlignItems = "MIN";
+  node35.counterAxisAlignItems = "CENTER";
+  node35.resize(984, 64);
+  node35.clipsContent = true;
+  node35.cornerRadius = 16;
+  node35.layoutAlign = "STRETCH";
+  node35.layoutGrow = 0;
+  node35.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node33.appendChild(node35);
+
+  const node36 = figma.createText();
+  node36.name = "Subject";
+  node36.fontName = fontBold;
+  node36.characters = "Subject";
+  node36.fontSize = 20;
+  node36.lineHeight = { unit: "AUTO" };
+  node36.letterSpacing = { unit: "PERCENT", value: 0 };
+  node36.resize(76, 24);
+  node36.layoutAlign = "INHERIT";
+  node36.layoutGrow = 0;
+  node36.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  node35.appendChild(node36);
+
+  const node37 = figma.createFrame();
+  node37.name = "Enquiry Set";
+  node37.layoutMode = "VERTICAL";
+  node37.itemSpacing = 12;
+  node37.paddingLeft = 0;
+  node37.paddingRight = 0;
+  node37.paddingTop = 0;
+  node37.paddingBottom = 0;
+  node37.primaryAxisSizingMode = "AUTO";
+  node37.counterAxisSizingMode = "FIXED";
+  node37.primaryAxisAlignItems = "MIN";
+  node37.counterAxisAlignItems = "MIN";
+  node37.resize(984, 221);
+  node37.clipsContent = true;
+  node37.layoutAlign = "STRETCH";
+  node37.layoutGrow = 0;
+  node37.fills = [];
+  node0.appendChild(node37);
+
+  const node38 = figma.createText();
+  node38.name = "Enquiry";
+  node38.fontName = fontBold;
+  node38.characters = "Enquiry";
+  node38.fontSize = 24;
+  node38.lineHeight = { unit: "AUTO" };
+  node38.letterSpacing = { unit: "PERCENT", value: 0 };
+  node38.resize(91, 29);
+  node38.layoutAlign = "INHERIT";
+  node38.layoutGrow = 0;
+  node38.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node37.appendChild(node38);
+
+  const node39 = figma.createFrame();
+  node39.name = "Field - Enquiry Input Box";
+  node39.layoutMode = "HORIZONTAL";
+  node39.itemSpacing = 0;
+  node39.paddingLeft = 20;
+  node39.paddingRight = 0;
+  node39.paddingTop = 20;
+  node39.paddingBottom = 0;
+  node39.primaryAxisSizingMode = "FIXED";
+  node39.counterAxisSizingMode = "FIXED";
+  node39.primaryAxisAlignItems = "MIN";
+  node39.counterAxisAlignItems = "MIN";
+  node39.resize(984, 180);
+  node39.clipsContent = true;
+  node39.cornerRadius = 16;
+  node39.layoutAlign = "STRETCH";
+  node39.layoutGrow = 0;
+  node39.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node37.appendChild(node39);
+
+  const node40 = figma.createText();
+  node40.name = "How can we help you?";
+  node40.fontName = fontBold;
+  node40.characters = "How can we help you?";
+  node40.fontSize = 20;
+  node40.lineHeight = { unit: "AUTO" };
+  node40.letterSpacing = { unit: "PERCENT", value: 0 };
+  node40.resize(217, 24);
+  node40.layoutAlign = "INHERIT";
+  node40.layoutGrow = 0;
+  node40.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  node39.appendChild(node40);
+
+  const node41 = figma.createFrame();
+  node41.name = "Upload Set";
+  node41.layoutMode = "VERTICAL";
+  node41.itemSpacing = 15;
+  node41.paddingLeft = 0;
+  node41.paddingRight = 0;
+  node41.paddingTop = 0;
+  node41.paddingBottom = 0;
+  node41.primaryAxisSizingMode = "AUTO";
+  node41.counterAxisSizingMode = "FIXED";
+  node41.primaryAxisAlignItems = "MIN";
+  node41.counterAxisAlignItems = "MIN";
+  node41.resize(984, 108);
+  node41.layoutAlign = "STRETCH";
+  node41.layoutGrow = 0;
+  node41.fills = [];
+  node0.appendChild(node41);
+
+  const node42 = figma.createText();
+  node42.name = "Upload Photo";
+  node42.fontName = fontBold;
+  node42.characters = "Upload Photo";
+  node42.fontSize = 24;
+  node42.lineHeight = { unit: "AUTO" };
+  node42.letterSpacing = { unit: "PERCENT", value: 0 };
+  node42.resize(158, 29);
+  node42.layoutAlign = "INHERIT";
+  node42.layoutGrow = 0;
+  node42.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node41.appendChild(node42);
+
+  const node43 = figma.createFrame();
+  node43.name = "Upload Container";
+  node43.layoutMode = "HORIZONTAL";
+  node43.itemSpacing = 20;
+  node43.paddingLeft = 0;
+  node43.paddingRight = 0;
+  node43.paddingTop = 0;
+  node43.paddingBottom = 0;
+  node43.primaryAxisSizingMode = "FIXED";
+  node43.counterAxisSizingMode = "AUTO";
+  node43.primaryAxisAlignItems = "MIN";
+  node43.counterAxisAlignItems = "CENTER";
+  node43.resize(984, 64);
+  node43.layoutAlign = "STRETCH";
+  node43.layoutGrow = 0;
+  node43.fills = [];
+  node41.appendChild(node43);
+
+  const node44 = figma.createFrame();
+  node44.name = "Field - Choose File Button Box";
+  node44.layoutMode = "HORIZONTAL";
+  node44.itemSpacing = 0;
+  node44.paddingLeft = 0;
+  node44.paddingRight = 0;
+  node44.paddingTop = 0;
+  node44.paddingBottom = 0;
+  node44.primaryAxisSizingMode = "FIXED";
+  node44.counterAxisSizingMode = "FIXED";
+  node44.primaryAxisAlignItems = "CENTER";
+  node44.counterAxisAlignItems = "CENTER";
+  node44.resize(160, 64);
+  node44.clipsContent = true;
+  node44.cornerRadius = 16;
+  node44.layoutAlign = "INHERIT";
+  node44.layoutGrow = 0;
+  node44.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  node43.appendChild(node44);
+
+  const node45 = figma.createText();
+  node45.name = "Choose File";
+  node45.fontName = fontBold;
+  node45.characters = "Choose File";
+  node45.fontSize = 20;
+  node45.lineHeight = { unit: "AUTO" };
+  node45.letterSpacing = { unit: "PERCENT", value: 0 };
+  node45.resize(115, 24);
+  node45.layoutAlign = "INHERIT";
+  node45.layoutGrow = 0;
+  node45.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  node44.appendChild(node45);
+
+  const node46 = figma.createFrame();
+  node46.name = "Field - Upload Info Box";
+  node46.layoutMode = "HORIZONTAL";
+  node46.itemSpacing = 12;
+  node46.paddingLeft = 0;
+  node46.paddingRight = 0;
+  node46.paddingTop = 0;
+  node46.paddingBottom = 0;
+  node46.primaryAxisSizingMode = "FIXED";
+  node46.counterAxisSizingMode = "FIXED";
+  node46.primaryAxisAlignItems = "MIN";
+  node46.counterAxisAlignItems = "CENTER";
+  node46.resize(804, 64);
+  node46.clipsContent = true;
+  node46.cornerRadius = 16;
+  node46.layoutAlign = "INHERIT";
+  node46.layoutGrow = 0;
+  node46.fills = [];
+  node43.appendChild(node46);
+
+  const node47 = figma.createText();
+  node47.name = "JPG & PNG File Size: Up to 10 MB";
+  node47.fontName = fontBold;
+  node47.characters = "JPG & PNG File Size: Up to 10 MB";
+  node47.fontSize = 20;
+  node47.lineHeight = { unit: "AUTO" };
+  node47.letterSpacing = { unit: "PERCENT", value: 0 };
+  node47.resize(318, 24);
+  node47.layoutAlign = "INHERIT";
+  node47.layoutGrow = 0;
+  node47.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  node46.appendChild(node47);
+
+  figma.viewport.scrollAndZoomIntoView([node0]);
+  figma.notify('Desktop design created!');
+}
+
+async function createMobile(fontFamily) {
+  const fontBold = { family: fontFamily, style: "Bold" };
+
+  try {
+    await figma.loadFontAsync(fontBold);
+  } catch (e) {
+    figma.notify(`Font "${fontFamily} Bold" not found. Falling back to Inter.`);
+    await figma.loadFontAsync({ family: "Inter", style: "Bold" });
+    fontBold.family = "Inter";
+  }
+
+  const node0 = figma.createFrame();
+  node0.name = "Contact Fields Section (Mobile)";
+  node0.layoutMode = "VERTICAL";
+  node0.itemSpacing = 24;
+  node0.paddingLeft = 16;
+  node0.paddingRight = 16;
+  node0.paddingTop = 32;
+  node0.paddingBottom = 32;
+  node0.primaryAxisSizingMode = "AUTO";
+  node0.counterAxisSizingMode = "FIXED";
+  node0.resize(375, 1200);
+  node0.fills = [];
+  figma.currentPage.appendChild(node0);
+
+  const createFormField = (label, placeholder) => {
+    const field = figma.createFrame();
+    field.name = "Field - " + label;
+    field.layoutMode = "VERTICAL";
+    field.itemSpacing = 8;
+    field.layoutAlign = "STRETCH";
+    field.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+
+    const lbl = figma.createText();
+    lbl.fontName = fontBold;
+    lbl.characters = label;
+    lbl.fontSize = 20;
+    lbl.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
+    field.appendChild(lbl);
+
+    const input = figma.createFrame();
+    input.name = "Frame";
+    input.layoutMode = "HORIZONTAL";
+    input.paddingLeft = 16;
+    input.resize(input.width, 56);
+    input.cornerRadius = 12;
+    input.layoutAlign = "STRETCH";
+    input.fills = [];
+    
+    const txt = figma.createText();
+    txt.fontName = fontBold;
+    txt.characters = placeholder;
+    txt.fontSize = 16;
+    txt.fills = [{ type: "SOLID", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+    input.appendChild(txt);
+    
+    field.appendChild(input);
+    return field;
+  };
+
+  node0.appendChild(createFormField("Name", "Full Name Here..."));
+  node0.appendChild(createFormField("Email", "e.g. johndoe@email.com"));
+
+  const mobileSet = figma.createFrame();
+  mobileSet.name = "Mobile Set";
+  mobileSet.layoutMode = "VERTICAL";
+  mobileSet.itemSpacing = 8;
+  mobileSet.layoutAlign = "STRETCH";
+  mobileSet.fills = [];
+  
+  const mobileLabel = figma.createText();
+  mobileLabel.fontName = fontBold;
+  mobileLabel.characters = "Mobile Number";
+  mobileLabel.fontSize = 20;
+  mobileLabel.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
+  mobileSet.appendChild(mobileLabel);
+
+  const mobileRow = figma.createFrame();
+  mobileRow.layoutMode = "HORIZONTAL";
+  mobileRow.itemSpacing = 12;
+  mobileRow.layoutAlign = "STRETCH";
+  mobileRow.fills = [];
+
+  const codeBox = figma.createFrame();
+  codeBox.name = "Field - Country Code";
+  codeBox.resize(70, 56);
+  codeBox.cornerRadius = 12;
+  codeBox.layoutMode = "HORIZONTAL";
+  codeBox.primaryAxisAlignItems = "CENTER";
+  codeBox.counterAxisAlignItems = "CENTER";
+  codeBox.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  const codeTxt = figma.createText();
+  codeTxt.characters = "+60";
+  codeTxt.fontName = fontBold;
+  codeTxt.fontSize = 16;
+  codeTxt.fills = [{ type: "SOLID", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  codeBox.appendChild(codeTxt);
+  mobileRow.appendChild(codeBox);
+
+  const phoneInput = figma.createFrame();
+  phoneInput.name = "Field - Mobile Input";
+  phoneInput.layoutGrow = 1;
+  phoneInput.resize(phoneInput.width, 56);
+  phoneInput.cornerRadius = 12;
+  phoneInput.layoutMode = "HORIZONTAL";
+  phoneInput.paddingLeft = 16;
+  phoneInput.counterAxisAlignItems = "CENTER";
+  phoneInput.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  const phonePlaceholder = figma.createText();
+  phonePlaceholder.characters = "e.g. 127654321";
+  phonePlaceholder.fontName = fontBold;
+  phonePlaceholder.fontSize = 16;
+  phonePlaceholder.fills = [{ type: "SOLID", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  phoneInput.appendChild(phonePlaceholder);
+  mobileRow.appendChild(phoneInput);
+  
+  mobileSet.appendChild(mobileRow);
+  node0.appendChild(mobileSet);
+
+  const catSet = figma.createFrame();
+  catSet.name = "Category Set";
+  catSet.layoutMode = "VERTICAL";
+  catSet.itemSpacing = 8;
+  catSet.layoutAlign = "STRETCH";
+  catSet.fills = [];
+  
+  const catLabel = figma.createText();
+  catLabel.fontName = fontBold;
+  catLabel.characters = "Category";
+  catLabel.fontSize = 20;
+  catLabel.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
+  catSet.appendChild(catLabel);
+  
+  const categories = ["Check Status", "Defects", "Did Not Receive Parcels", "Appeal Status", "Others"];
+  categories.forEach((label) => {
+    const cat = figma.createFrame();
+    cat.name = (label === "Others") ? "cat_final" : "Frame";
+    cat.layoutAlign = "STRETCH";
+    cat.resize(cat.width, 56);
+    cat.cornerRadius = 12;
+    cat.layoutMode = "HORIZONTAL";
+    cat.primaryAxisAlignItems = "CENTER";
+    cat.counterAxisAlignItems = "CENTER";
+    cat.fills = [];
+    cat.strokes = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+    if (label === "Others") {
+      cat.resize(343, 56); // Mobile centered size
+    } else {
+      cat.resize(cat.width, 56);
+    }
+    cat.strokeWeight = 1;
+    const txt = figma.createText();
+    txt.characters = label;
+    txt.fontName = fontBold;
+    txt.fontSize = 18;
+    txt.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
+    cat.appendChild(txt);
+    catSet.appendChild(cat);
+  });
+  node0.appendChild(catSet);
+
+  node0.appendChild(createFormField("Subject", "Subject"));
+  const enquiry = createFormField("Enquiry", "How can we help you?");
+  enquiry.children[1].resize(enquiry.children[1].width, 140);
+  enquiry.children[1].paddingTop = 16;
+  enquiry.children[1].counterAxisAlignItems = "MIN";
+  node0.appendChild(enquiry);
+
+  const uploadSet = figma.createFrame();
+  uploadSet.name = "Upload Set";
+  uploadSet.layoutMode = "VERTICAL";
+  uploadSet.itemSpacing = 8;
+  uploadSet.layoutAlign = "STRETCH";
+  uploadSet.fills = [];
+  
+  const uploadLabel = figma.createText();
+  uploadLabel.fontName = fontBold;
+  uploadLabel.characters = "Upload Photo";
+  uploadLabel.fontSize = 20;
+  uploadLabel.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
+  uploadSet.appendChild(uploadLabel);
+
+  const chooseBtn = figma.createFrame();
+  chooseBtn.name = "Field - Choose Button";
+  chooseBtn.layoutAlign = "STRETCH";
+  chooseBtn.resize(chooseBtn.width, 56);
+  chooseBtn.cornerRadius = 12;
+  chooseBtn.layoutMode = "HORIZONTAL";
+  chooseBtn.primaryAxisAlignItems = "CENTER";
+  chooseBtn.counterAxisAlignItems = "CENTER";
+  chooseBtn.fills = [{ type: "SOLID", visible: true, opacity: 1, blendMode: "NORMAL", color: { r: 1, g: 1, b: 1 } }];
+  const btnTxt = figma.createText();
+  btnTxt.characters = "Choose File";
+  btnTxt.fontName = fontBold;
+  btnTxt.fontSize = 16;
+  btnTxt.fills = [{ type: "SOLID", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  chooseBtn.appendChild(btnTxt);
+  uploadSet.appendChild(chooseBtn);
+
+  const infoBox = figma.createFrame();
+  infoBox.name = "Field - Upload Info";
+  infoBox.layoutAlign = "STRETCH";
+  infoBox.layoutMode = "HORIZONTAL";
+  infoBox.counterAxisAlignItems = "CENTER";
+  infoBox.paddingLeft = 16;
+  infoBox.resize(infoBox.width, 48);
+  infoBox.cornerRadius = 12;
+  infoBox.fills = [];
+  const infoTxt = figma.createText();
+  infoTxt.characters = "JPG & PNG Size: Up to 10 MB";
+  infoTxt.fontName = fontBold;
+  infoTxt.fontSize = 14;
+  infoTxt.fills = [{ type: "SOLID", color: { r: 0.65, g: 0.68, b: 0.72 } }];
+  infoBox.appendChild(infoTxt);
+  uploadSet.appendChild(infoBox);
+  node0.appendChild(uploadSet);
+
+  figma.viewport.scrollAndZoomIntoView([node0]);
+  figma.notify('Mobile design created!');
+}
+
+figma.ui.onmessage = async (msg) => {
+  if (msg.type === 'create-contact-us') {
+    const { mode, fontFamily } = msg;
+    if (mode === 'desktop') {
+      await createDesktop(fontFamily);
+    } else {
+      await createMobile(fontFamily);
+    }
+  }
+};

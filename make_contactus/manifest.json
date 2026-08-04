@@ -1,0 +1,8 @@
+{
+  "name": "/make.contactus",
+  "id": "make-contactus",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "editorType": ["figma"]
+}

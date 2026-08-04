@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; padding: 20px; text-align: center; background-color: #2c2c2c; color: white; }
+    .gold-preview {
+      width: 100%;
+      height: 120px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 2px solid #555;
+      background: linear-gradient(
+        135deg,
+        #bf953f 0%,
+        #fcf6ba 25%,
+        #b38728 50%,
+        #fbf5b7 75%,
+        #aa771c 100%
+      );
+    }
+    .controls {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    input[type="number"] {
+      width: 45px;
+      background: #444;
+      color: white;
+      border: 1px solid #666;
+      border-radius: 4px;
+      padding: 2px 5px;
+    }
+    input[type="range"] {
+      flex-grow: 1;
+      accent-color: #bf953f;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #bf953f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    button:hover { background: #aa771c; }
+    .css-code {
+      margin-top: 15px;
+      background: #1e1e1e;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 10px;
+      text-align: left;
+      border-radius: 4px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <h3>Golden Texture</h3>
+  <div class="gold-preview" id="preview"></div>
+  
+  <div class="controls">
+    <div class="control-row" style="width: 100%;">
+      <label>Angle</label>
+      <input type="range" id="angle-range" min="0" max="360" value="45">
+      <input type="number" id="angle-input" value="45">
+      <span>deg</span>
+    </div>
+  </div>
+
+  <button id="create">Create in Figma</button>
+  <button id="copy">Copy CSS</button>
+  <div class="css-code" id="css-output"></div>
+
+  <script>
+    const preview = document.getElementById('preview');
+    const angleInput = document.getElementById('angle-input');
+    const angleRange = document.getElementById('angle-range');
+    const cssOutput = document.getElementById('css-output');
+
+    function updateUI(e) {
+      if (e && e.target === angleRange) {
+        angleInput.value = angleRange.value;
+      } else if (e && e.target === angleInput) {
+        angleRange.value = angleInput.value;
+      }
+
+      const angle = angleInput.value || 0;
+      const goldGradient = `linear-gradient(${angle}deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%)`;
+      preview.style.background = goldGradient;
+      
+      let css = `/* Tailwind 4 @theme */
+@theme {
+  --background-image-golden: ${goldGradient};
+}`;
+      cssOutput.innerText = css;
+    }
+
+    angleInput.oninput = updateUI;
+    angleRange.oninput = updateUI;
+    
+    document.getElementById('create').onclick = () => {
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'create-golden', 
+          angle: parseInt(angleInput.value) || 0
+        } 
+      }, '*');
+    };
+
+    updateUI();
+
+    document.getElementById('copy').onclick = () => {
+      const el = document.createElement('textarea');
+      el.value = cssOutput.innerText;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      alert('CSS Copied!');
+    };
+  </script>
+</body>
+</html>
