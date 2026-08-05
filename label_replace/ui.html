@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #2c2c2c; color: white; display: flex; flex-direction: column; height: 100vh; margin: 0; box-sizing: border-box; }
+    h3 { margin-top: 0; }
+    #list-container { flex: 1; overflow-y: auto; margin-bottom: 15px; border: 1px solid #444; border-radius: 4px; padding: 10px; background: #1e1e1e; }
+    .mapping-row { display: flex; flex-direction: column; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #333; }
+    .original-text { font-size: 11px; color: #888; margin-bottom: 4px; word-break: break-all; }
+    input { 
+      padding: 8px; 
+      font-size: 12px; 
+      background: #333; 
+      color: white; 
+      border: 1px solid #555; 
+      border-radius: 4px; 
+    }
+    input:focus { border-color: #18A0FB; outline: none; }
+    button { 
+      width: 100%; 
+      padding: 12px; 
+      background: #18A0FB; 
+      color: white; 
+      border: none; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      font-weight: bold; 
+      flex-shrink: 0;
+    }
+    button:hover { background: #0d8de3; }
+    .empty-msg { font-size: 12px; color: #666; text-align: center; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h3>Label Replace</h3>
+  <div id="list-container">
+    <div class="empty-msg">Select a frame or layout to see text layers</div>
+  </div>
+  <button id="replace-btn">Replace All</button>
+
+  <script>
+    const container = document.getElementById('list-container');
+    const replaceBtn = document.getElementById('replace-btn');
+    let currentData = [];
+
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (msg.type === 'text-layers-found') {
+        currentData = msg.data;
+        renderList(currentData);
+      }
+    };
+
+    function renderList(data) {
+      if (data.length === 0) {
+        container.innerHTML = '<div class="empty-msg">No text layers found in selection</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      data.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'mapping-row';
+        
+        const label = document.createElement('div');
+        label.className = 'original-text';
+        label.textContent = `Original: "${item.text}"`;
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = item.text;
+        input.dataset.index = index;
+        input.oninput = (e) => {
+          currentData[index].newText = e.target.value;
+        };
+
+        row.appendChild(label);
+        row.appendChild(input);
+        container.appendChild(row);
+      });
+    }
+
+    replaceBtn.onclick = () => {
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'do-replace', 
+          mappings: currentData 
+        } 
+      }, '*');
+    };
+  </script>
+</body>
+</html>

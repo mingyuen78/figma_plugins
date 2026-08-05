@@ -44,7 +44,19 @@
   </div>
   <div class="row">
     <label>Font Family</label>
-    <input type="text" id="fontFamily" value="Inter">
+    <input type="text" id="fontFamily" value="Ny Carlsberg Display">
+  </div>
+  <div class="row">
+    <label>Font Size</label>
+    <input type="number" id="fontSize" value="24" min="1">
+  </div>
+  <div class="row">
+    <label>Padding X</label>
+    <input type="number" id="paddingX" value="24" min="0">
+  </div>
+  <div class="row">
+    <label>Padding Y</label>
+    <input type="number" id="paddingY" value="24" min="0">
   </div>
   <div class="row">
     <label>Text Color</label>
@@ -60,6 +72,9 @@
     document.getElementById('create').onclick = () => {
       const count = parseInt(document.getElementById('count').value);
       const fontFamily = document.getElementById('fontFamily').value;
+      const fontSize = parseInt(document.getElementById('fontSize').value);
+      const paddingX = parseInt(document.getElementById('paddingX').value);
+      const paddingY = parseInt(document.getElementById('paddingY').value);
       const textColor = document.getElementById('textColor').value;
       const bgColor = document.getElementById('bgColor').value;
       
@@ -68,6 +83,9 @@
           type: 'create-accordions', 
           count, 
           fontFamily, 
+          fontSize,
+          paddingX,
+          paddingY,
           textColor, 
           bgColor 
         } 

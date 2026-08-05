@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 260, height: 280 });
+figma.showUI(__html__, { width: 260, height: 380 });
 
 function hexToRgb(hex) {
   const r = parseInt(hex.substring(1, 3), 16) / 255;
@@ -9,7 +9,7 @@ function hexToRgb(hex) {
 
 figma.ui.onmessage = async (msg) => {
   if (msg.type === 'create-accordions') {
-    const { count, fontFamily, textColor, bgColor } = msg;
+    const { count, fontFamily, fontSize, paddingX, paddingY, textColor, bgColor } = msg;
     const textRgb = hexToRgb(textColor);
     const bgRgb = hexToRgb(bgColor);
 
@@ -22,17 +22,34 @@ figma.ui.onmessage = async (msg) => {
       await figma.loadFontAsync({ family: "Inter", style: "Regular" });
     }
 
+    const selection = figma.currentPage.selection;
+    let targetWidth = 1024;
+    let pLeft = 20, pRight = 20, pTop = 20, pBottom = 20, spacing = 16;
+
+    if (selection.length > 0 && (selection[0].type === 'FRAME' || selection[0].type === 'COMPONENT' || selection[0].type === 'INSTANCE')) {
+      const selected = selection[0];
+      targetWidth = selected.width;
+      // If the selected element has auto-layout, respect its padding and spacing
+      if (selected.layoutMode !== "NONE") {
+        pLeft = selected.paddingLeft;
+        pRight = selected.paddingRight;
+        pTop = selected.paddingTop;
+        pBottom = selected.paddingBottom;
+        spacing = selected.itemSpacing;
+      }
+    }
+
     const container = figma.createFrame();
     container.name = "Accordion Container";
     container.layoutMode = "VERTICAL";
-    container.itemSpacing = 16;
-    container.paddingLeft = 20;
-    container.paddingRight = 20;
-    container.paddingTop = 20;
-    container.paddingBottom = 20;
+    container.itemSpacing = spacing;
+    container.paddingLeft = pLeft;
+    container.paddingRight = pRight;
+    container.paddingTop = pTop;
+    container.paddingBottom = pBottom;
     container.primaryAxisSizingMode = "AUTO";
     container.counterAxisSizingMode = "FIXED";
-    container.resize(1024, 100);
+    container.resize(targetWidth, 100);
     container.fills = []; // Transparent background
 
     for (let i = 1; i <= count; i++) {
@@ -42,11 +59,11 @@ figma.ui.onmessage = async (msg) => {
       accordion.primaryAxisSizingMode = "FIXED";
       accordion.counterAxisSizingMode = "AUTO";
       accordion.layoutAlign = "STRETCH";
-      accordion.resize(1024 - 40, 80);
-      accordion.paddingLeft = 24;
-      accordion.paddingRight = 24;
-      accordion.paddingTop = 24;
-      accordion.paddingBottom = 24;
+      accordion.resize(targetWidth - pLeft - pRight, 1); // Set to 1, Hug will expand it
+      accordion.paddingLeft = paddingX || 24;
+      accordion.paddingRight = paddingX || 24;
+      accordion.paddingTop = paddingY || 24;
+      accordion.paddingBottom = paddingY || 24;
       accordion.cornerRadius = 12;
       accordion.fills = [{ type: 'SOLID', color: bgRgb }];
       accordion.primaryAxisAlignItems = "SPACE_BETWEEN";
@@ -59,9 +76,11 @@ figma.ui.onmessage = async (msg) => {
         text.fontName = { family: "Inter", style: "Bold" };
       }
       text.characters = `${i}. This is a sample accordion question?`;
-      text.fontSize = 24;
+      text.fontSize = fontSize || 24;
       text.fills = [{ type: 'SOLID', color: textRgb }];
       text.layoutAlign = "INHERIT";
+      text.layoutGrow = 1;
+      text.textAutoResize = "HEIGHT";
 
       // Chevron Icon (Vector)
       const chevron = figma.createVector();
@@ -80,7 +99,11 @@ figma.ui.onmessage = async (msg) => {
       container.appendChild(accordion);
     }
 
-    figma.currentPage.appendChild(container);
+    if (selection.length > 0 && (selection[0].type === 'FRAME' || selection[0].type === 'COMPONENT' || selection[0].type === 'INSTANCE')) {
+      selection[0].appendChild(container);
+    } else {
+      figma.currentPage.appendChild(container);
+    }
     figma.currentPage.selection = [container];
     figma.viewport.scrollAndZoomIntoView([container]);
     
