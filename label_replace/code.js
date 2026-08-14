@@ -5,16 +5,15 @@ function getTextNodesFromSelection() {
   let nodes = [];
   
   if (selection.length > 0) {
-    function traverse(node) {
-      if (node.type === "TEXT") {
-        nodes.push(node);
-      } else if ("children" in node) {
-        for (const child of node.children) {
-          traverse(child);
-        }
+    selection.forEach(node => {
+      if (node.type === "TEXT") nodes.push(node);
+      if ("findAll" in node) {
+        nodes.push(...node.findAll(n => n.type === "TEXT"));
       }
-    }
-    selection.forEach(traverse);
+    });
+  } else {
+    // Tunnel through the entire page if nothing is selected
+    nodes = figma.currentPage.findAll(n => n.type === "TEXT");
   }
   return nodes;
 }

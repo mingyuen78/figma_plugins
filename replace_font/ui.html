@@ -37,6 +37,7 @@
     <select id="fontSelect">
       <option value="Ny Carlsberg Display">Ny Carlsberg Display</option>
       <option value="FZDaHei-B02S">FZDaHei-B02S</option>
+      <option value="Bourton">Bourton</option>
       <option value="custom">Custom...</option>
     </select>
   </div>
@@ -46,21 +47,74 @@
     <input type="text" id="customFont" placeholder="Enter font family...">
   </div>
 
+  <div class="row">
+    <label>Font Style</label>
+    <select id="weightSelect">
+      <option value="keep">Keep Original</option>
+      <option value="Regular">Regular</option>
+      <option value="Bold">Bold</option>
+      <option value="Medium">Medium</option>
+      <option value="Light">Light</option>
+      <option value="Italic">Italic</option>
+      <option value="custom-weight">Custom...</option>
+    </select>
+  </div>
+
+  <div class="row" id="customWeightRow" style="display: none;">
+    <label>Style Name</label>
+    <input type="text" id="customWeight" placeholder="e.g. SemiBold, Base...">
+  </div>
+
   <button id="replace">Replace Fonts</button>
   <div class="hint">Will replace all text fonts in selection (or entire page if nothing selected)</div>
 
   <script>
     const fontSelect = document.getElementById('fontSelect');
     const customRow = document.getElementById('customRow');
+    const weightSelect = document.getElementById('weightSelect');
+    const customWeightRow = document.getElementById('customWeightRow');
+
+    const fontStyles = {
+      'Bourton': ['Base 1664', 'Base Drop 1664', 'Regular', 'Bold'],
+      'Ny Carlsberg Display': ['Regular', 'Bold', 'Black'],
+      'FZDaHei-B02S': ['Regular'],
+      'default': ['Regular', 'Bold', 'Medium', 'Light', 'Italic']
+    };
 
     fontSelect.onchange = () => {
-      customRow.style.display = fontSelect.value === 'custom' ? 'flex' : 'none';
+      const isCustom = fontSelect.value === 'custom';
+      customRow.style.display = isCustom ? 'flex' : 'none';
+      
+      // Update styles dropdown
+      const family = fontSelect.value;
+      const styles = fontStyles[family] || fontStyles['default'];
+      
+      // Keep "Keep Original" and add family-specific styles
+      weightSelect.innerHTML = '<option value="keep">Keep Original</option>';
+      styles.forEach(style => {
+        const opt = document.createElement('option');
+        opt.value = style;
+        opt.textContent = style;
+        weightSelect.appendChild(opt);
+      });
+      weightSelect.innerHTML += '<option value="custom-weight">Custom...</option>';
+      
+      customWeightRow.style.display = 'none';
+    };
+
+    weightSelect.onchange = () => {
+      customWeightRow.style.display = weightSelect.value === 'custom-weight' ? 'flex' : 'none';
     };
 
     document.getElementById('replace').onclick = () => {
       let fontFamily = fontSelect.value;
       if (fontFamily === 'custom') {
         fontFamily = document.getElementById('customFont').value;
+      }
+
+      let fontStyle = weightSelect.value;
+      if (fontStyle === 'custom-weight') {
+        fontStyle = document.getElementById('customWeight').value;
       }
 
       if (!fontFamily) {
@@ -71,7 +125,8 @@
       parent.postMessage({ 
         pluginMessage: { 
           type: 'replace-font', 
-          fontFamily 
+          fontFamily,
+          fontStyle 
         } 
       }, '*');
     };
