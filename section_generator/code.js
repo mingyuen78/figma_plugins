@@ -7,7 +7,6 @@ const targetDimensions = [
   { w: 1536, h: 695 },
   { w: 1536, h: 730 },
   { w: 1536, h: 826 },
-  { w: 1707, h: 825 },
   { w: 1920, h: 1080 },
   { w: 2880, h: 1418 },
   { w: 2880, h: 1367 }
@@ -115,7 +114,7 @@ if (selectedSections.length === 0) {
       return;
     }
 
-    if (msg.type === 'rename') {
+    if (msg.type === 'generate' || msg.type === 'rename') {
       const keywords = msg.keywords || [];
       let totalProcessed = 0;
       

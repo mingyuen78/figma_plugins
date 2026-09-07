@@ -21,9 +21,9 @@ This skill allows you to rename and organize child items within a Figma section 
    - Example: `home_deco_en` -> `home_deco_1920x1080_en`.
 
 3. **Target Dimensions (Tolerance: ±5px)**:
+   - 500x900
    - 1280x550, 1280x585, 1280x665, 1280x695
    - 1536x695, 1536x730, 1536x826
-   - 1707x825
    - 1920x1080
    - 2880x1418
    - 2880x1367 (Auto-created if missing)

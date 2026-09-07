@@ -17,6 +17,7 @@ A Figma plugin dedicated to generating, renaming, and organizing items within a 
 
 ## Supported Dimensions
 
+- 500x900
 - 1280x550
 - 1280x585
 - 1280x665
@@ -24,7 +25,6 @@ A Figma plugin dedicated to generating, renaming, and organizing items within a 
 - 1536x695
 - 1536x730
 - 1536x826
-- 1707x825
 - 1920x1080
 - 2880x1418
 - 2880x1367 (Automatically created if no matching item exists in the section)

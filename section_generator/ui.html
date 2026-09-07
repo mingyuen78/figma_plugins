@@ -34,7 +34,7 @@
       cursor: pointer;
       font-weight: 500;
     }
-    #rename {
+    #generate {
       background-color: #18a0fb;
       color: white;
     }
@@ -54,16 +54,16 @@
   <input type="text" id="keywords" placeholder="e.g. MONT, TONT" autofocus>
   <div class="buttons">
     <button id="cancel">Cancel</button>
-    <button id="rename">Rename</button>
+    <button id="generate">Generate</button>
   </div>
 
   <script>
-    document.getElementById('rename').onclick = () => {
+    document.getElementById('generate').onclick = () => {
       const keywords = document.getElementById('keywords').value
         .split(',')
         .map(s => s.trim())
         .filter(s => s.length > 0);
-      parent.postMessage({ pluginMessage: { type: 'rename', keywords } }, '*');
+      parent.postMessage({ pluginMessage: { type: 'generate', keywords } }, '*');
     };
 
     document.getElementById('cancel').onclick = () => {
@@ -73,7 +73,7 @@
     // Handle Enter key
     document.getElementById('keywords').onkeydown = (e) => {
       if (e.key === 'Enter') {
-        document.getElementById('rename').click();
+        document.getElementById('generate').click();
       }
     };
   </script>
