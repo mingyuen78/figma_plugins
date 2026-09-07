@@ -1,6 +1,6 @@
 {
-  "name": "/section.renamer",
-  "id": "section-renamer-plugin-id",
+  "name": "/section.generator",
+  "id": "section-generator-plugin-id",
   "api": "1.0.0",
   "main": "code.js",
   "ui": "ui.html",

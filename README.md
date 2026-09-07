@@ -40,8 +40,8 @@ Once you have configured your parameters in the "Parameter Here" section, run th
     - Contains vertically stacked links with submenu chevrons aligned to the far right.
     - Includes a Heroicon close button at the top right.
 
-### 4. `/section.renamer`
-Dedicated to renaming and organizing banner items within a section.
+### 4. `/section.generator`
+Dedicated to generating, renaming, and organizing banner items within a section.
 
 #### Features:
 - **Rename**: Inserts matched dimensions into the name (e.g., `home_deco_en` → `home_deco_1920x1080_en`).

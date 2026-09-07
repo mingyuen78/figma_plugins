@@ -1,9 +1,9 @@
 ---
-name: section-renamer
-description: Use this skill to rename and organize items within a Figma section based on their dimensions. Trigger this skill whenever the user mentions "renaming banners", "organizing sections", "banner naming", or specifically asks to use the "/section.renamer" functionality. This skill is essential for maintaining consistent naming and layout conventions for marketing banners in Figma.
+name: section-generator
+description: Use this skill to rename, generate, and organize items within a Figma section based on their dimensions. Trigger this skill whenever the user mentions "renaming banners", "organizing sections", "banner naming", "generating section banners", or specifically asks to use the "/section.generator" functionality. This skill is essential for maintaining consistent naming and layout conventions for marketing banners in Figma.
 ---
 
-# /section.renamer Skill
+# /section.generator Skill
 
 This skill allows you to rename and organize child items within a Figma section according to specific dimensions and layout rules.
 
@@ -37,4 +37,4 @@ This skill allows you to rename and organize child items within a Figma section 
 
 ## Implementation Details
 
-The implementation is located in `./section_renamer/code.js`. Use this file as the source of truth for the logic.
+The implementation is located in `./section_generator/code.js`. Use this file as the source of truth for the logic.

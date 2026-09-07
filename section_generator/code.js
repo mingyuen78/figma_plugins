@@ -1,4 +1,5 @@
 const targetDimensions = [
+  { w: 500, h: 900 },
   { w: 1280, h: 550 },
   { w: 1280, h: 585 },
   { w: 1280, h: 665 },
@@ -15,6 +16,59 @@ const targetDimensions = [
 const tolerance = 5;
 const gap = 120;
 const padding = 60;
+
+function createPlaceholders(frame) {
+  if (!("appendChild" in frame)) return;
+
+  const is1280 = Math.abs(Math.round(frame.width) - 1280) <= tolerance;
+  const is2880 = Math.abs(Math.round(frame.width) - 2880) <= tolerance;
+  const headerHeight = is1280 ? 40 : (is2880 ? 60 * 1.5 : 60);
+  let header = null;
+  if ("children" in frame) {
+    header = frame.children.find(c => c.name === "header_zone");
+  }
+  if (!header) {
+    header = figma.createFrame();
+    header.name = "header_zone";
+    frame.appendChild(header);
+  }
+  header.resize(frame.width, headerHeight);
+  header.x = 0;
+  header.y = 0;
+  header.fills = [{ type: 'SOLID', color: { r: 1, g: 0, b: 0 }, opacity: 0.2 }];
+
+  const footerHeight = is2880 ? 120 * 1.5 : 120;
+  let footer = null;
+  if ("children" in frame) {
+    footer = frame.children.find(c => c.name === "footer_zone");
+  }
+  if (!footer) {
+    footer = figma.createFrame();
+    footer.name = "footer_zone";
+    frame.appendChild(footer);
+  }
+  footer.resize(frame.width, footerHeight);
+  footer.x = 0;
+  footer.y = frame.height - footerHeight;
+  footer.fills = [{ type: 'SOLID', color: { r: 1, g: 0, b: 0 }, opacity: 0.2 }];
+
+  const is500 = Math.abs(Math.round(frame.width) - 500) <= tolerance;
+  const buttonWidth = is500 ? 240 : (is2880 ? 200 * 1.5 : 200);
+  const buttonHeight = is500 ? 50 : (is2880 ? 40 * 1.5 : 40);
+  let button = null;
+  if ("children" in footer) {
+    button = footer.children.find(c => c.name === "button_zone");
+  }
+  if (!button) {
+    button = figma.createFrame();
+    button.name = "button_zone";
+    footer.appendChild(button);
+  }
+  button.resize(buttonWidth, buttonHeight);
+  button.x = (footer.width - buttonWidth) / 2;
+  button.y = (footer.height - buttonHeight) / 2;
+  button.fills = [{ type: 'SOLID', color: { r: 0, g: 1, b: 0 }, opacity: 0.2 }];
+}
 
 function findClosestDimension(width, height) {
   const roundedW = Math.round(width);
@@ -111,6 +165,7 @@ if (selectedSections.length === 0) {
               }
               
               child.name = newName;
+              createPlaceholders(child);
               matchedChildren.push(child);
             }
           }
@@ -126,6 +181,7 @@ if (selectedSections.length === 0) {
               ? `${prefix}_${dimKey}_${suffix}`
               : `${prefix}_${dimKey}`;
             newFrame.name = newName;
+            createPlaceholders(newFrame);
             section.appendChild(newFrame);
             matchedChildren.push(newFrame);
           }

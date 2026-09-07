@@ -1,6 +1,6 @@
-# /section.renamer
+# /section.generator
 
-A Figma plugin dedicated to renaming and organizing items within a section based on their dimensions.
+A Figma plugin dedicated to generating, renaming, and organizing items within a section based on their dimensions.
 
 ## Features
 
@@ -32,5 +32,5 @@ A Figma plugin dedicated to renaming and organizing items within a section based
 ## How to Use
 
 1. Select a **Section** (or an item within a section).
-2. Run the `/section.renamer` plugin.
+2. Run the `/section.generator` plugin.
 3. If no section is found in the selection or hierarchy, an alert will prompt you to select one.
