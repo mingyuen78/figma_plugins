@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 16px;
+      background: #ffffff;
+      color: #333333;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .title {
+      font-weight: 600;
+      font-size: 13px;
+      color: #111111;
+    }
+    .badge {
+      background: #f0f0f0;
+      color: #666666;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .section-title {
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #888888;
+      margin-bottom: 8px;
+    }
+    .tokens-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .token-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fafafa;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #eeeeee;
+      transition: all 0.15s ease;
+    }
+    .token-row.is-deleted {
+      background: #fff5f5;
+      border-color: #ffd6d6;
+    }
+    .token-label {
+      font-weight: 600;
+      font-family: monospace;
+      color: #18a0fb;
+      background: #eef7ff;
+      padding: 3px 6px;
+      border-radius: 4px;
+      min-width: 60px;
+      max-width: 110px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 11px;
+    }
+    .token-row.is-deleted .token-label {
+      text-decoration: line-through;
+      color: #e02020;
+      background: #ffebeb;
+    }
+    .arrow {
+      color: #999999;
+      font-size: 12px;
+    }
+    .token-input {
+      flex: 1;
+      padding: 6px 8px;
+      border: 1px solid #d0d0d0;
+      border-radius: 4px;
+      font-size: 12px;
+      outline: none;
+      font-family: inherit;
+    }
+    .token-input:focus {
+      border-color: #18a0fb;
+      box-shadow: 0 0 0 2px rgba(24, 160, 251, 0.2);
+    }
+    .token-input.is-deleted-input {
+      background: #fffafa;
+      border-color: #ffcccc;
+      color: #999999;
+    }
+    .delete-btn {
+      background: transparent;
+      border: 1px solid #e0e0e0;
+      color: #888888;
+      width: 26px;
+      height: 26px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 0;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    .delete-btn:hover {
+      background: #ffebeb;
+      border-color: #ffb3b3;
+      color: #d0021b;
+    }
+    .delete-btn.restore {
+      background: #eef7ff;
+      border-color: #b3d7ff;
+      color: #18a0fb;
+    }
+    .uncommon-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chip-locked {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #f5f5f5;
+      color: #888888;
+      border: 1px dashed #cccccc;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 11px;
+      user-select: none;
+    }
+    .chip-locked .lock-icon {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+    .preview-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 120px;
+      overflow-y: auto;
+      background: #fcfcfc;
+      border: 1px solid #eeeeee;
+      border-radius: 6px;
+      padding: 8px;
+    }
+    .preview-item {
+      font-family: monospace;
+      font-size: 11px;
+      color: #444444;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 4px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .preview-item:last-child {
+      border-bottom: none;
+    }
+    .preview-old {
+      color: #999999;
+      text-decoration: line-through;
+      font-size: 10px;
+    }
+    .preview-new {
+      color: #0d8de3;
+      font-weight: 500;
+    }
+    .footer-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid #e5e5e5;
+      margin-top: 8px;
+    }
+    button {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.15s ease;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #444444;
+      border: 1px solid #d0d0d0;
+    }
+    .btn-secondary:hover {
+      background: #f5f5f5;
+    }
+    .btn-primary {
+      background: #18a0fb;
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: #0d8de3;
+    }
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      color: #888888;
+      text-align: center;
+      gap: 8px;
+      padding: 32px 16px;
+    }
+    .empty-icon {
+      font-size: 24px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="title">Universal Replacer</div>
+    <div id="selection-badge" class="badge">0 selected</div>
+  </div>
+
+  <div id="empty-view" class="empty-state" style="display: none;">
+    <div class="empty-icon">&#9634;</div>
+    <div>Select one or more layers on the canvas to inspect and replace layer name parts.</div>
+  </div>
+
+  <div id="main-content" class="scroll-area">
+    <div id="common-section">
+      <div class="section-title">Common Parts (Editable)</div>
+      <div id="common-list" class="tokens-list"></div>
+    </div>
+
+    <div id="uncommon-section" style="display: none;">
+      <div class="section-title">Uncommon Parts (Locked)</div>
+      <div id="uncommon-chips" class="uncommon-chips"></div>
+    </div>
+
+    <div id="preview-section">
+      <div class="section-title">Preview</div>
+      <div id="preview-list" class="preview-list"></div>
+    </div>
+  </div>
+
+  <div id="footer-actions" class="footer-actions">
+    <button id="cancel-btn" class="btn-secondary">Cancel</button>
+    <button id="replace-btn" class="btn-primary">Replace</button>
+  </div>
+
+  <script>
+    let currentData = {
+      layerCount: 0,
+      layers: [],
+      commonTokens: [],
+      uncommonTokens: []
+    };
+    let currentReplacements = {};
+
+    const badge = document.getElementById('selection-badge');
+    const emptyView = document.getElementById('empty-view');
+    const mainContent = document.getElementById('main-content');
+    const commonSection = document.getElementById('common-section');
+    const commonList = document.getElementById('common-list');
+    const uncommonSection = document.getElementById('uncommon-section');
+    const uncommonChips = document.getElementById('uncommon-chips');
+    const previewList = document.getElementById('preview-list');
+    const replaceBtn = document.getElementById('replace-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (msg.type === 'selection-updated') {
+        currentData = msg.data;
+        initReplacements();
+        render();
+      }
+    };
+
+    function initReplacements() {
+      currentReplacements = {};
+      currentData.commonTokens.forEach(item => {
+        currentReplacements[item.token] = item.token;
+      });
+    }
+
+    function updatePreview() {
+      previewList.innerHTML = '';
+      currentData.layers.forEach(layer => {
+        const newTokens = [];
+        layer.tokens.forEach(token => {
+          if (Object.prototype.hasOwnProperty.call(currentReplacements, token)) {
+            const val = currentReplacements[token];
+            if (val !== null && val !== undefined && val !== '') {
+              newTokens.push(val);
+            }
+          } else {
+            newTokens.push(token);
+          }
+        });
+        const newName = newTokens.join('_') || layer.name;
+        const isChanged = newName !== layer.name;
+
+        const itemEl = document.createElement('div');
+        itemEl.className = 'preview-item';
+
+        if (isChanged) {
+          itemEl.innerHTML = `
+            <div class="preview-old">${escapeHtml(layer.name)}</div>
+            <div class="preview-new">${escapeHtml(newName)}</div>
+          `;
+        } else {
+          itemEl.innerHTML = `
+            <div class="preview-new" style="color: #444444;">${escapeHtml(layer.name)}</div>
+          `;
+        }
+        previewList.appendChild(itemEl);
+      });
+    }
+
+    function render() {
+      badge.textContent = `${currentData.layerCount} layer${currentData.layerCount === 1 ? '' : 's'} selected`;
+
+      if (currentData.layerCount === 0) {
+        emptyView.style.display = 'flex';
+        mainContent.style.display = 'none';
+        document.getElementById('footer-actions').style.display = 'none';
+        return;
+      }
+
+      emptyView.style.display = 'none';
+      mainContent.style.display = 'flex';
+      document.getElementById('footer-actions').style.display = 'flex';
+
+      commonList.innerHTML = '';
+      if (currentData.commonTokens.length === 0) {
+        commonList.innerHTML = '<div style="color: #888888; font-size: 11px;">No common parts found between selected layers.</div>';
+      } else {
+        currentData.commonTokens.forEach(item => {
+          const row = document.createElement('div');
+          const isDeleted = currentReplacements[item.token] === '';
+          row.className = `token-row ${isDeleted ? 'is-deleted' : ''}`;
+
+          const label = document.createElement('div');
+          label.className = 'token-label';
+          label.textContent = item.token;
+          label.title = item.token;
+
+          const arrow = document.createElement('div');
+          arrow.className = 'arrow';
+          arrow.textContent = '→';
+
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.className = `token-input ${isDeleted ? 'is-deleted-input' : ''}`;
+          input.value = currentReplacements[item.token] !== undefined ? currentReplacements[item.token] : item.token;
+          input.placeholder = isDeleted ? '(deleted - separator removed)' : item.token;
+
+          const delBtn = document.createElement('button');
+          delBtn.className = `delete-btn ${isDeleted ? 'restore' : ''}`;
+          delBtn.type = 'button';
+          delBtn.innerHTML = isDeleted ? '&#8617;' : '&#10005;';
+          delBtn.title = isDeleted ? 'Restore part' : 'Delete part';
+
+          delBtn.onclick = () => {
+            if (currentReplacements[item.token] === '') {
+              currentReplacements[item.token] = item.token;
+              input.value = item.token;
+              row.classList.remove('is-deleted');
+              input.classList.remove('is-deleted-input');
+              input.placeholder = item.token;
+              delBtn.innerHTML = '&#10005;';
+              delBtn.title = 'Delete part';
+              delBtn.classList.remove('restore');
+            } else {
+              currentReplacements[item.token] = '';
+              input.value = '';
+              row.classList.add('is-deleted');
+              input.classList.add('is-deleted-input');
+              input.placeholder = '(deleted - separator removed)';
+              delBtn.innerHTML = '&#8617;';
+              delBtn.title = 'Restore part';
+              delBtn.classList.add('restore');
+            }
+            updatePreview();
+          };
+
+          input.oninput = (e) => {
+            const val = e.target.value;
+            currentReplacements[item.token] = val;
+            if (val === '') {
+              row.classList.add('is-deleted');
+              input.classList.add('is-deleted-input');
+              input.placeholder = '(deleted - separator removed)';
+              delBtn.innerHTML = '&#8617;';
+              delBtn.title = 'Restore part';
+              delBtn.classList.add('restore');
+            } else {
+              row.classList.remove('is-deleted');
+              input.classList.remove('is-deleted-input');
+              input.placeholder = item.token;
+              delBtn.innerHTML = '&#10005;';
+              delBtn.title = 'Delete part';
+              delBtn.classList.remove('restore');
+            }
+            updatePreview();
+          };
+
+          input.onkeydown = (e) => {
+            if (e.key === 'Enter') {
+              doReplace();
+            }
+          };
+
+          row.appendChild(label);
+          row.appendChild(arrow);
+          row.appendChild(input);
+          row.appendChild(delBtn);
+          commonList.appendChild(row);
+        });
+      }
+
+      uncommonChips.innerHTML = '';
+      if (currentData.uncommonTokens.length > 0) {
+        uncommonSection.style.display = 'block';
+        currentData.uncommonTokens.forEach(item => {
+          const chip = document.createElement('div');
+          chip.className = 'chip-locked';
+          chip.innerHTML = `<span class="lock-icon">&#128274;</span> ${escapeHtml(item.token)}`;
+          chip.title = `Unique part (${item.count} occurrences) - cannot be batch edited`;
+          uncommonChips.appendChild(chip);
+        });
+      } else {
+        uncommonSection.style.display = 'none';
+      }
+
+      updatePreview();
+    }
+
+    function doReplace() {
+      parent.postMessage({
+        pluginMessage: {
+          type: 'replace',
+          replacements: currentReplacements
+        }
+      }, '*');
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    replaceBtn.onclick = doReplace;
+
+    cancelBtn.onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    };
+  </script>
+</body>
+</html>
