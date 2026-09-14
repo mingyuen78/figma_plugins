@@ -52,7 +52,7 @@ figma.ui.onmessage = msg => {
     const createdDecorators = [];
     for (const node of selection) {
       const width = node.width;
-      const height = Math.ceil(node.height / 3);
+      const height = Math.ceil(node.height / 3) + 50;
 
       const decorator = figma.createFrame();
       decorator.name = "section_decorator";
