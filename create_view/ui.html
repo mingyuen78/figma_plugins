@@ -37,6 +37,8 @@
     <input type="color" id="baseColor" value="#FFFFFF">
   </div>
   <button id="create">Create View</button>
+  <button id="decorator">Create Decorator</button>
+  <button id="feathered-bg">Create Feathered BG</button>
 
   <script>
     document.getElementById('create').onclick = () => {
@@ -45,6 +47,17 @@
       const [width, height] = resolution.split('x').map(Number);
       
       parent.postMessage({ pluginMessage: { type: 'create-view', width, height, baseColor } }, '*');
+    };
+
+    document.getElementById('decorator').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'create-decorator' } }, '*');
+    };
+
+    document.getElementById('feathered-bg').onclick = () => {
+      const resolution = document.getElementById('resolution').value;
+      const [width, height] = resolution.split('x').map(Number);
+      
+      parent.postMessage({ pluginMessage: { type: 'create-feathered-bg', width, height } }, '*');
     };
   </script>
 </body>
