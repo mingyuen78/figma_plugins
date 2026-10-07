@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; padding: 20px; box-sizing: border-box; }
+    .row { margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+    label { width: 52px; font-size: 12px; }
+    input { flex: 1; min-width: 0; padding: 4px; font-size: 12px; height: 28px; box-sizing: border-box; }
+    button { width: 100%; padding: 8px; background: #18A0FB; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="row">
+    <label for="width">Width</label>
+    <input id="width" type="number" min="1" step="any" placeholder="Width in pixels">
+  </div>
+  <div class="row">
+    <label for="height">Height</label>
+    <input id="height" type="number" min="1" step="any" placeholder="Height in pixels">
+  </div>
+  <button id="resize">Resize selected elements</button>
+
+  <script>
+    document.getElementById('resize').onclick = () => {
+      const width = Number(document.getElementById('width').value);
+      const height = Number(document.getElementById('height').value);
+
+      if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) {
+        alert('Enter a valid width and height greater than zero.');
+        return;
+      }
+
+      parent.postMessage({
+        pluginMessage: { type: 'resize-selection', width, height }
+      }, '*');
+    };
+  </script>
+</body>
+</html>
