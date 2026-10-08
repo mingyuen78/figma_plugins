@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 240, height: 280 });
+figma.showUI(__html__, { width: 240, height: 480 });
 
 function hexToRgb(hex) {
   let c = hex.replace(/^#/, '');
