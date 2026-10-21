@@ -47,6 +47,26 @@
       flex-direction: column;
       gap: 16px;
     }
+    .mode-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 3px;
+      margin-bottom: 12px;
+      background: #f5f5f5;
+      border-radius: 6px;
+    }
+    .mode-tab {
+      flex: 1;
+      padding: 7px 10px;
+      background: transparent;
+      color: #666666;
+      border-radius: 4px;
+    }
+    .mode-tab.active {
+      background: #ffffff;
+      color: #111111;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    }
     .section-title {
       font-weight: 600;
       font-size: 11px;
@@ -163,6 +183,38 @@
       font-size: 10px;
       opacity: 0.7;
     }
+    .whole-names-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .whole-name-row {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+      background: #fafafa;
+      border: 1px solid #eeeeee;
+      border-radius: 6px;
+    }
+    .whole-name-label {
+      color: #666666;
+      font-family: monospace;
+      font-size: 11px;
+      overflow-wrap: anywhere;
+    }
+    .whole-name-input {
+      width: 100%;
+      padding: 7px 8px;
+      border: 1px solid #d0d0d0;
+      border-radius: 4px;
+      font: inherit;
+      outline: none;
+    }
+    .whole-name-input:focus {
+      border-color: #18a0fb;
+      box-shadow: 0 0 0 2px rgba(24, 160, 251, 0.2);
+    }
     .preview-list {
       display: flex;
       flex-direction: column;
@@ -251,12 +303,18 @@
     <div id="selection-badge" class="badge">0 selected</div>
   </div>
 
+  <div id="mode-tabs" class="mode-tabs">
+    <button id="default-mode-tab" class="mode-tab active" type="button">Default</button>
+    <button id="whole-mode-tab" class="mode-tab" type="button">Replace Whole</button>
+  </div>
+
   <div id="empty-view" class="empty-state" style="display: none;">
     <div class="empty-icon">&#9634;</div>
     <div>Select one or more layers on the canvas to inspect and replace layer name parts.</div>
   </div>
 
   <div id="main-content" class="scroll-area">
+    <div id="default-content" style="display: flex; flex-direction: column; gap: 16px;">
     <div id="common-section">
       <div class="section-title">Common Parts (Editable)</div>
       <div id="common-list" class="tokens-list"></div>
@@ -270,6 +328,14 @@
     <div id="preview-section">
       <div class="section-title">Preview</div>
       <div id="preview-list" class="preview-list"></div>
+    </div>
+    </div>
+
+    <div id="whole-content" style="display: none; flex-direction: column; gap: 16px;">
+      <div>
+        <div class="section-title">Selected Layer Names</div>
+        <div id="whole-names-list" class="whole-names-list"></div>
+      </div>
     </div>
   </div>
 
@@ -286,8 +352,15 @@
       uncommonTokens: []
     };
     let currentReplacements = {};
+    let currentWholeNames = {};
+    let currentMode = 'default';
 
     const badge = document.getElementById('selection-badge');
+    const defaultModeTab = document.getElementById('default-mode-tab');
+    const wholeModeTab = document.getElementById('whole-mode-tab');
+    const defaultContent = document.getElementById('default-content');
+    const wholeContent = document.getElementById('whole-content');
+    const wholeNamesList = document.getElementById('whole-names-list');
     const emptyView = document.getElementById('empty-view');
     const mainContent = document.getElementById('main-content');
     const commonSection = document.getElementById('common-section');
@@ -309,8 +382,51 @@
 
     function initReplacements() {
       currentReplacements = {};
+      currentWholeNames = {};
       currentData.commonTokens.forEach(item => {
         currentReplacements[item.token] = item.token;
+      });
+      currentData.layers.forEach(layer => {
+        currentWholeNames[layer.id] = layer.name;
+      });
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      defaultModeTab.classList.toggle('active', mode === 'default');
+      wholeModeTab.classList.toggle('active', mode === 'whole');
+      defaultContent.style.display = mode === 'default' ? 'flex' : 'none';
+      wholeContent.style.display = mode === 'whole' ? 'flex' : 'none';
+    }
+
+    function renderWholeNames() {
+      wholeNamesList.innerHTML = '';
+      currentData.layers.forEach(layer => {
+        const row = document.createElement('div');
+        row.className = 'whole-name-row';
+
+        const label = document.createElement('div');
+        label.className = 'whole-name-label';
+        label.textContent = layer.name;
+        label.title = layer.name;
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'whole-name-input';
+        input.value = currentWholeNames[layer.id] !== undefined ? currentWholeNames[layer.id] : layer.name;
+        input.setAttribute('aria-label', `New name for ${layer.name}`);
+        input.oninput = event => {
+          currentWholeNames[layer.id] = event.target.value;
+        };
+        input.onkeydown = event => {
+          if (event.key === 'Enter') {
+            doReplace();
+          }
+        };
+
+        row.appendChild(label);
+        row.appendChild(input);
+        wholeNamesList.appendChild(row);
       });
     }
 
@@ -354,13 +470,17 @@
       if (currentData.layerCount === 0) {
         emptyView.style.display = 'flex';
         mainContent.style.display = 'none';
+        document.getElementById('mode-tabs').style.display = 'none';
         document.getElementById('footer-actions').style.display = 'none';
         return;
       }
 
       emptyView.style.display = 'none';
       mainContent.style.display = 'flex';
+      document.getElementById('mode-tabs').style.display = 'flex';
       document.getElementById('footer-actions').style.display = 'flex';
+      setMode(currentMode);
+      renderWholeNames();
 
       commonList.innerHTML = '';
       if (currentData.commonTokens.length === 0) {
@@ -471,7 +591,9 @@
       parent.postMessage({
         pluginMessage: {
           type: 'replace',
-          replacements: currentReplacements
+          mode: currentMode,
+          replacements: currentReplacements,
+          names: currentWholeNames
         }
       }, '*');
     }
@@ -484,6 +606,8 @@
         .replace(/"/g, '&quot;');
     }
 
+    defaultModeTab.onclick = () => setMode('default');
+    wholeModeTab.onclick = () => setMode('whole');
     replaceBtn.onclick = doReplace;
 
     cancelBtn.onclick = () => {

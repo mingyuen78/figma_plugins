@@ -83,10 +83,23 @@ figma.ui.onmessage = (msg) => {
   }
 
   if (msg.type === 'replace') {
-    const replacements = msg.replacements || {};
     const selection = figma.currentPage.selection;
     let modifiedCount = 0;
 
+    if (msg.mode === 'whole') {
+      const names = msg.names || {};
+      selection.forEach(node => {
+        if (Object.prototype.hasOwnProperty.call(names, node.id) && names[node.id] !== node.name) {
+          node.name = names[node.id];
+          modifiedCount++;
+        }
+      });
+      figma.notify(`Successfully updated ${modifiedCount} layer name(s)!`);
+      updateUI();
+      return;
+    }
+
+    const replacements = msg.replacements || {};
     selection.forEach(node => {
       const tokens = node.name.split('_');
       let changed = false;
