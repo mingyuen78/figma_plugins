@@ -1,5 +1,5 @@
 const targetDimensions = [
-  { w: 500, h: 1192 },
+  { w: 640, h: 1192 },
   { w: 1280, h: 550 },
   { w: 1280, h: 585 },
   { w: 1280, h: 665 },
@@ -18,9 +18,9 @@ const padding = 60;
 function createPlaceholders(frame) {
   if (!("appendChild" in frame)) return;
 
-  const is1280 = Math.abs(Math.round(frame.width) - 1280) <= tolerance;
   const is2880 = Math.abs(Math.round(frame.width) - 2880) <= tolerance;
-  const headerHeight = is1280 ? 40 : (is2880 ? 60 * 1.5 : 60);
+  const is640x1192 = Math.abs(Math.round(frame.width) - 640) <= tolerance && Math.abs(Math.round(frame.height) - 1192) <= tolerance;
+  const headerHeight = 100;
   let header = null;
   if ("children" in frame) {
     header = frame.children.find(c => c.name === "header_zone");
@@ -35,7 +35,7 @@ function createPlaceholders(frame) {
   header.y = 0;
   header.fills = [{ type: 'SOLID', color: { r: 1, g: 0, b: 0 }, opacity: 0.2 }];
 
-  const footerHeight = is2880 ? 120 * 1.5 : 120;
+  const footerHeight = is640x1192 ? 220 : (is2880 ? 120 * 1.5 : 120);
   let footer = null;
   if ("children" in frame) {
     footer = frame.children.find(c => c.name === "footer_zone");
@@ -50,9 +50,9 @@ function createPlaceholders(frame) {
   footer.y = frame.height - footerHeight;
   footer.fills = [{ type: 'SOLID', color: { r: 1, g: 0, b: 0 }, opacity: 0.2 }];
 
-  const is500 = Math.abs(Math.round(frame.width) - 500) <= tolerance;
-  const buttonWidth = is500 ? 240 : (is2880 ? 200 * 1.5 : 200);
-  const buttonHeight = is500 ? 50 : (is2880 ? 40 * 1.5 : 40);
+  const is640 = Math.abs(Math.round(frame.width) - 640) <= tolerance;
+  const buttonWidth = is640 ? 240 : (is2880 ? 200 * 1.5 : 200);
+  const buttonHeight = is640 ? 50 : (is2880 ? 40 * 1.5 : 40);
   let button = null;
   if ("children" in footer) {
     button = footer.children.find(c => c.name === "button_zone");
@@ -64,7 +64,7 @@ function createPlaceholders(frame) {
   }
   button.resize(buttonWidth, buttonHeight);
   button.x = (footer.width - buttonWidth) / 2;
-  button.y = (footer.height - buttonHeight) / 2;
+  button.y = is640x1192 ? 30 : (footer.height - buttonHeight) / 2;
   button.fills = [{ type: 'SOLID', color: { r: 0, g: 1, b: 0 }, opacity: 0.2 }];
 }
 
